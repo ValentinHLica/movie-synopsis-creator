@@ -1,0 +1,38 @@
+{
+  "name": "movie-synopsis-creator",
+  "version": "1.0.0",
+  "description": "Create videos from movie synopsis from IMDB",
+  "main": "build/index.js",
+  "bin": "build/index.js",
+  "scripts": {
+    "copy:assets": "cp -R src/assets src/data build",
+    "build:app": "rm -rf build dist && tsc -p .",
+    "build:exe": "rm -rf ./reddit-video-creator.exe && pkg .",
+    "build": "npm run build:app && npm run build:exe",
+    "start": "npm run build:app && node ./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ValentinHLica/movie-synopsis-creator.git"
+  },
+  "author": "Valentin Lica",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ValentinHLica/movie-synopsis-creator/issues"
+  },
+  "homepage": "https://github.com/ValentinHLica/movie-synopsis-creator#readme",
+  "dependencies": {
+    "pkg": "^5.5.1"
+  },
+  "pkg": {
+    "scripts": "build/**/*.js",
+    "targets": [
+      "node16-win-x64"
+    ],
+    "outputPath": "./"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.12",
+    "typescript": "^4.5.3"
+  }
+}
