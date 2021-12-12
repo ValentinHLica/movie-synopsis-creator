@@ -1,0 +1,3 @@
+Idea:
+Movies will be downloaded from yts and synopsis will be fetched from imdb.
+Using UI user can select which text to show for specific start timestamp (calculate clip duration with text audio length using util). The Program will then take the movie and split it with the time stamps and add audio and subtitle to the clips. Merge entire clips to form video

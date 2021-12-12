@@ -1,0 +1,58 @@
+{
+  "moviePath": "C:\\Users\\licav\\Desktop\\Dev\\movie-synopsis-creator\\src\\movie.mp4",
+  "timeStamps": [
+    {
+      "text": "The movie opens in outer space with the starship Avalon on autopilot heading to the colony world of Homestead II during a mass exodus of Earth's population.",
+      "startTime": "00:01:19"
+    },
+    {
+      "text": "The crew and the 5,000 passengers are all in hibernation pods for the 120-year journey. It is 30 years into the journey.",
+      "startTime": "00:02:10"
+    },
+    {
+      "text": "The ship travels through a meteor storm, and power is diverted to the forward shields",
+      "startTime": "00:02:44"
+    },
+    {
+      "text": "then the ship collides with a large meteor and the power blinks,",
+      "startTime": "00:03:08"
+    },
+    {
+      "text": "red alert screens come on in the control area, then quickly go back to normal. Something bad has happened.",
+      "startTime": "00:03:22"
+    },
+    {
+      "text": "Jim Preston (Chris Pratt), a mechanical engineer",
+      "startTime": "00:03:58"
+    },
+    {
+      "text": "wakes up in his pod with a cheery computer voice telling him that soon they will be arriving at Homestead II.",
+      "startTime": "00:04:21"
+    },
+    {
+      "text": "He is told that it is normal to feel confused and weak after being in hibernation.",
+      "startTime": "00:04:38"
+    },
+    {
+      "text": "The wristband on his arm is scanned, and the computer leads him to his cabin where he sleeps.",
+      "startTime": "00:05:44"
+    },
+    {
+      "text": "The next day he wakes up, tries to decide what to wear when meeting fellow passengers,",
+      "startTime": "00:06:43"
+    },
+    {
+      "text": "then makes his way to a cafeteria where he is the only one.",
+      "startTime": "00:07:28"
+    },
+    {
+      "text": "He goes to an orientation session about life as a colonist on Homestead, but he is the only one there.",
+      "startTime": "00:07:34"
+    },
+    {
+      "text": "The cheery computer generated instructor cannot understand his question about why no one else is there.",
+      "startTime": "00:08:04"
+    }
+  ],
+  "exportPath": "C:\\Users\\licav\\Desktop"
+}
