@@ -165,7 +165,7 @@ export const getDuration = (subtitlePath: string) => {
 
   const time = arr[arr.length - 2].split("-->").map((e) => e.trim());
 
-  return parseTime(time[1]);
+  return time[1].replace(",", ".");
 };
 
 /**

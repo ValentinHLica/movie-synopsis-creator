@@ -1,3 +1,7 @@
 Idea:
 Movies will be downloaded from yts and synopsis will be fetched from imdb.
 Using UI user can select which text to show for specific start timestamp (calculate clip duration with text audio length using util). The Program will then take the movie and split it with the time stamps and add audio and subtitle to the clips. Merge entire clips to form video
+
+
+ffmpeg -ss 00:06:43 -i C:\\Users\\licav\\Desktop\\Dev\\movie-synopsis-creator\\src\\movie.mp4 -c copy -an -t 00:00:05.265 output.mp4
+

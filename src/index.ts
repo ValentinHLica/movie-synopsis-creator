@@ -1,4 +1,6 @@
 import generateAudio from "./audio/index";
+import generateClips from "./video/index";
+
 import { resetTemp } from "./utils/helpers";
 
 const renderVideo = async () => {
@@ -10,8 +12,8 @@ const renderVideo = async () => {
   // Generate audio file for each comment
   await generateAudio();
 
-  // Generate video
-  //   await generateVideo(measureText);
+  // Generate Clips
+  await generateClips();
 
   // Reset temp
   // await resetTemp();
