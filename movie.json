@@ -1,57 +1,361 @@
 {
-  "moviePath": "C:\\Users\\licav\\Desktop\\Dev\\movie-synopsis-creator\\src\\movie.mp4",
+  "moviePath": "C:\\Users\\licav\\Desktop\\passengers.mp4",
   "timeStamps": [
     {
-      "text": "The movie opens in outer space with the starship Avalon on autopilot heading to the colony world of Homestead II during a mass exodus of Earth's population.",
-      "startTime": "00:01:19"
+      "text": "The movie opens in outer space with the starship Avalon on autopilot heading to the colony world of Homestead II during a mass departure of Earth's population.",
+      "startTime": "00:01:34"
     },
     {
       "text": "The crew and the 5,000 passengers are all in hibernation pods for the 120-year journey. It is 30 years into the journey.",
-      "startTime": "00:02:10"
+      "startTime": "00:02:07"
     },
     {
-      "text": "The ship travels through a meteor storm, and power is diverted to the forward shields",
-      "startTime": "00:02:44"
+      "text": "The ship travels through a meteor storm",
+      "startTime": "00:02:34"
     },
     {
-      "text": "then the ship collides with a large meteor and the power blinks,",
+      "text": "and power is diverted to the forward shields",
+      "startTime": "00:02:43"
+    },
+    {
+      "text": "then the ship collides with a large meteor and the power blinks",
       "startTime": "00:03:08"
     },
     {
-      "text": "red alert screens come on in the control area, then quickly go back to normal. Something bad has happened.",
-      "startTime": "00:03:22"
+      "text": "red alert screens come on in the control area",
+      "startTime": "00:03:23"
     },
     {
-      "text": "Jim Preston (Chris Pratt), a mechanical engineer",
-      "startTime": "00:03:58"
+      "text": "then quickly go back to normal.Something bad has happened",
+      "startTime": "00:03:30"
     },
+    { "text": "Jim Preston, a mechanical engineer", "startTime": "00:04:00" },
     {
       "text": "wakes up in his pod with a cheery computer voice telling him that soon they will be arriving at Homestead II.",
-      "startTime": "00:04:21"
+      "startTime": "00:04:27"
     },
     {
       "text": "He is told that it is normal to feel confused and weak after being in hibernation.",
-      "startTime": "00:04:38"
+      "startTime": "00:04:37"
     },
     {
       "text": "The wristband on his arm is scanned, and the computer leads him to his cabin where he sleeps.",
       "startTime": "00:05:44"
     },
     {
-      "text": "The next day he wakes up, tries to decide what to wear when meeting fellow passengers,",
+      "text": "The next day he wakes up, tries to decide what to wear when meeting fellow passengers",
       "startTime": "00:06:43"
     },
     {
-      "text": "then makes his way to a cafeteria where he is the only one.",
+      "text": "He goes to an orientation session about life as a colonist on Homestead, but he is the only one there.",
       "startTime": "00:07:28"
     },
     {
-      "text": "He goes to an orientation session about life as a colonist on Homestead, but he is the only one there.",
-      "startTime": "00:07:34"
+      "text": "The cheery computer generated instructor cannot understand his question about why no one else is there.",
+      "startTime": "00:08:00"
     },
     {
-      "text": "The cheery computer generated instructor cannot understand his question about why no one else is there.",
-      "startTime": "00:08:04"
+      "text": "Jim goes to the Main Concourse and gets no help from the information kiosk.",
+      "startTime": "00:09:19"
+    },
+    {
+      "text": "He finds an office where he can send a message to the Homestead Company, that he is warned will be expensive",
+      "startTime": "00:11:31"
+    },
+    {
+      "text": "He sends a message explaining he is the only one awake and needs help",
+      "startTime": "00:11:56"
+    },
+    {
+      "text": "then finds out it will be 19 years before anyone on earth receives his message. He is on his own.",
+      "startTime": "00:12:44"
+    },
+    {
+      "text": "Jim finds the robot bartender Arthur who he can talk to",
+      "startTime": "00:13:33"
+    },
+    {
+      "text": "but the robot is programmed to dispense bartender advice like if you don't like where you are, change things.",
+      "startTime": "00:13:37"
+    },
+    {
+      "text": "Jim finds manuals for all the ship equipment.",
+      "startTime": "00:15:35"
+    },
+    {
+      "text": "He studies the manual on the hibernation pods but cannot find a way to get it started again once the person has woken up.",
+      "startTime": "00:16:00"
+    },
+    {
+      "text": "He cannot get into the area where the crew pods are to try and wake anyone for help, and he cannot get into the command area. His wristband does not give him the proper clearance.",
+      "startTime": "00:16:44"
+    },
+    {
+      "text": "Jim is a general class passenger with a basic cabin, and he breaks into a suite with nicer amenities.",
+      "startTime": "00:18:51"
+    },
+    {
+      "text": "A year passes as Jim makes use of the ship's entertainment facilities, but without other people, he becomes more desperately lonely. ",
+      "startTime": "00:20:22"
+    },
+    {
+      "text": "He goes to an area where passengers can put on a space suit and go outside while safely tethered to the ship.",
+      "startTime": "00:21:09"
+    },
+    {
+      "text": "Jim contemplates suicide by opening the airlock without a spacesuit",
+      "startTime": "00:24:18"
+    },
+    {
+      "text": "but stops himself and runs into the pod area.",
+      "startTime": "00:24:46"
+    },
+    {
+      "text": "He trips near a pod with a lovely woman inside, Aurora",
+      "startTime": "00:25:22"
+    },
+    {
+      "text": "He studies her passenger profile she had recorded before the ship set sail.",
+      "startTime": "00:25:53"
+    },
+    {
+      "text": "She is a journalist and is traveling to Homestead to have an adventure and learn about why people choose to be a colonist.",
+      "startTime": "00:26:34"
+    },
+    {
+      "text": "He reads her stories and thinks she is perfect.",
+      "startTime": "00:27:29"
+    },
+    {
+      "text": "He wrestles with himself about waking her up, knowing that it will doom her to die on the ship",
+      "startTime": "00:27:50"
+    },
+    {
+      "text": "so he manually makes her pod wake her up",
+      "startTime": "00:31:17"
+    },
+    { "text": " hiding before she can see him.", "startTime": "00:31:55" },
+    {
+      "text": "The same cheery computer program wakes up Aurora and leads her to her cabin to sleep.",
+      "startTime": "00:32:06"
+    },
+    {
+      "text": "Aurora wakes up the next day alone and wanders to the grand concourse where she meets Jim",
+      "startTime": "00:33:18"
+    },
+    {
+      "text": "He tells her the truth about how long he has been awake, but he doesn't tell her that he woke her up.",
+      "startTime": "00:34:10"
+    },
+    {
+      "text": "He has asked Arthur the robot bartender not to tell Aurora what he has done",
+      "startTime": "00:36:59"
+    },
+    { "text": "and Arthur agrees", "startTime": "00:37:26" },
+    {
+      "text": "Aurora and Jim talk daily, discuss what can be tried to fix the pods.",
+      "startTime": "00:39:53"
+    },
+    {
+      "text": "Aurora swims, runs, and begins to write her story. ",
+      "startTime": "00:41:21"
+    },
+    { "text": "She asks why Jim left planet Earth,", "startTime": "00:42:02" },
+    {
+      "text": "and he says he likes to make things and fix things, and on Earth, things get replaced when they break and are not fixed.He wants to live in a house he builds himself.",
+      "startTime": "00:42:19"
+    },
+    {
+      "text": "Her plan was to travel to the colony, spend a year there talking to colonists about why they left Earth, then return to Earth.",
+      "startTime": "00:43:50"
+    },
+    {
+      "text": "After some time of getting to know each other, Jim asks Aurora on a date and she accepts.",
+      "startTime": "00:49:36"
+    },
+    { "text": "After they eat", "startTime": "00:52:14" },
+    {
+      "text": "he takes her to the spacesuit room, and there are two suits and they both get dressed and go outside.",
+      "startTime": "00:53:12"
+    },
+    { "text": "Coming back in, Aurora is excited,", "startTime": "00:55:29" },
+    {
+      "text": "and they go to Jim's cabin and make love.",
+      "startTime": "00:55:44"
+    },
+    {
+      "text": "They are happy, have their routine of exercise,watching the stars, taking advantage of the ship's entertainment and restaurant venues.",
+      "startTime": "00:57:48"
+    },
+    {
+      "text": "Another year passes, and it's Aurora's birthday,",
+      "startTime": "01:00:38"
+    },
+    {
+      "text": "and Jim plans a special surprise, he made a ring for her. ",
+      "startTime": "01:01:16"
+    },
+    {
+      "text": "Going in the bar, Aurora tells Arthur that she and Jim have no secrets , ",
+      "startTime": "01:01:22"
+    },
+    {
+      "text": "not realizing that Arthur interprets this as meaning that Jim has told Aurora that he woke her up. ",
+      "startTime": "01:01:25"
+    },
+    {
+      "text": "and Arthur tells Aurora what a good choice Jim made to pick her to wake up.",
+      "startTime": "01:01:30"
+    },
+
+    {
+      "text": "Aurora is devastated and furious, and tells Jim to stay away from her.",
+      "startTime": "01:02:26"
+    },
+    {
+      "text": "One night she enters his cabin while he's sleeping, and assaults him with her fists. ",
+      "startTime": "01:04:54"
+    },
+    {
+      "text": "While she's running, Jim uses a ship's intercom to try and explain himself",
+      "startTime": "01:05:45"
+    },
+    {
+      "text": "but Aurora screams that Jim took her life.",
+      "startTime": "01:06:50"
+    },
+    {
+      "text": "While all of this is going on, the control room is more frequently getting alerts of system failures, more over time.",
+      "startTime": "01:07:44"
+    },
+    {
+      "text": "It's now two years since the meteor collision. One day Gus wakes up and appears on the concourse,",
+      "startTime": "01:12:03"
+    },
+    {
+      "text": "he is a deck crew chief and has woken up early. Hibernation Pods have never failed before, and he explains that something major is wrong. ",
+      "startTime": "01:12:30"
+    },
+    {
+      "text": "His wristband gets them into the command center",
+      "startTime": "01:13:01"
+    },
+    {
+      "text": "where they find that the ship's automatic diagnostics have failed and they need to check every deck manually.",
+      "startTime": "01:13:33"
+    },
+    {
+      "text": "While Gus runs tests before this can be done",
+      "startTime": "01:16:09"
+    },
+    {
+      "text": "there is a major gravity failure and Aurora almost drowns while in the swimming pool.",
+      "startTime": "01:18:14"
+    },
+    {
+      "text": "Gus finds that there have been cascading failures",
+      "startTime": "01:20:31"
+    },
+    {
+      "text": "and the computer can make a timeline that shows the first failure was two years before.",
+      "startTime": "01:20:39"
+    },
+    {
+      "text": "Gus determines that the first few failures caused power diversions to try and re-equalize the load, but the load became too heavy, causing more and more failures.",
+      "startTime": "01:21:01"
+    },
+    {
+      "text": "The area first affected was in the main engine area, but they will have to do a manual inspection to tell where.",
+      "startTime": "01:21:21"
+    },
+    {
+      "text": "At this point, Gus collapses,and Jim and Aurora take him to the infirmary and put him in the medical auto diagnostic scanner.",
+      "startTime": "01:21:49"
+    },
+    {
+      "text": "There are multiple necrosis all throughout his body and death is imminent , because of the malfunctioning hibernation pod.",
+      "startTime": "01:22:30"
+    },
+    {
+      "text": "He puts on his uniform and prepares to die",
+      "startTime": "01:24:07"
+    },
+    {
+      "text": "and gives Jim and Aurora his wristband, so they can access the areas of the ship they need to go to fix things.",
+      "startTime": "01:24:41"
+    },
+    {
+      "text": "In engineering, Jim and Aurora find a hole made by a meteorite that goes thru some critical areas. When they open one door, Aurora is almost sucked out because of a hole thru the hull.",
+      "startTime": "01:27:02"
+    },
+    {
+      "text": "She blocks it with a tablet Jim pushes to her, and Jim uses a liquid sealant to further seal to the hole.",
+      "startTime": "01:27:46"
+    },
+    {
+      "text": "they then learn the fusion engine exhaust has to be manually vented.",
+      "startTime": "01:28:40"
+    },
+    {
+      "text": "The manual override won't work, Jim has to get into a spacesuit and go outside to fix it. ",
+      "startTime": "01:30:02"
+    },
+    {
+      "text": "He ends up having to go into the exhaust passage to open a flap,but it won't stay open, unless Jim holds it open so that the manual vent will work.",
+      "startTime": "01:33:27"
+    },
+    {
+      "text": "Aurora, now desperate not to lose Jim, argues with him over the radio,",
+      "startTime": ""
+    },
+    { "text": "but she pulls the lever.", "startTime": "01:35:10" },
+    { "text": " Jim is pushed out ,", "startTime": "01:35:35" },
+    { "text": "his tether breaks,", "startTime": "01:35:43" },
+    { "text": " and there is a hole in his suit.", "startTime": "01:36:33" },
+    { "text": "He tells Aurora goodbye. ", "startTime": "01:37:17" },
+    {
+      "text": "She runs to get into a spacesuit herself and goes to look for him. ",
+      "startTime": "01:37:53"
+    },
+    {
+      "text": "She retrieves Jim by grabbing his tether,",
+      "startTime": "01:38:48"
+    },
+    {
+      "text": " but when they get inside, he is unresponsive.",
+      "startTime": "01:39:08"
+    },
+    { "text": "She drags him to the infirmary,", "startTime": "01:39:21" },
+    { "text": " and the auto-doc says Jim is dead.", "startTime": "01:39:39" },
+    {
+      "text": "  Aurora uses Gus' wristband and his override code to get the machine to resuscitate Jim,",
+      "startTime": "01:40:09"
+    },
+    {
+      "text": "and it works. He is alive, and she is relieved and overjoyed.",
+      "startTime": "01:41:14"
+    },
+    {
+      "text": "Later, things are back to normal on the ship.",
+      "startTime": "01:41:40"
+    },
+    { "text": "Jim works on the auto-doc", "startTime": "01:42:29" },
+    {
+      "text": " and tells Aurora he found that using the command override he could put her back in hibernation in the infirmary, but he would be alone again.",
+      "startTime": "01:43:18"
+    },
+    {
+      "text": " Aurora chooses to stay awake with Jim and make a life with him on the ship, together.",
+      "startTime": "01:44:25"
+    },
+    { "text": "88 years later...", "startTime": "01:46:45" },
+    {
+      "text": "It's the end of the voyage, and the captain and crew awake",
+      "startTime": "01:46:58"
+    },
+    {
+      "text": " and come to the grand concourse to find there is a huge tree, lots of trailing vines and vegetation, birds flying, and a cabin,Aurora's voice-over is reading her story to the passengers, explaining how they made a good life where they were.",
+      "startTime": "01:47:04"
     }
   ],
   "exportPath": "C:\\Users\\licav\\Desktop"

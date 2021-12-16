@@ -52,6 +52,8 @@ export const generateAudioFile: AudioGenerator = ({
     "--encoding",
     "utf8",
     "-fr",
+    "--silence-end",
+    "200",
     "48",
     "--lrc-length",
     "500",

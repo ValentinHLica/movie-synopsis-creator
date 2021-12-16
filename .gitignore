@@ -30,4 +30,4 @@ build
 *.exe
 *.mp4
 cli
-post.json
+movie.json
