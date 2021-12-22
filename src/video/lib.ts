@@ -1,22 +1,29 @@
-import { execFileSync } from "child_process";
 import { join } from "path";
+import { execFileSync } from "child_process";
+
+import { assetsPath } from "../config/paths";
+import { TimeStamp } from "../interfaces/utils";
+import { Font } from "../interfaces/video";
 
 import { getArgument } from "../utils/helpers";
 
 type CutMovieClip = (args: {
-  startTime: string;
+  timeStamp: TimeStamp;
   duration: string;
   moviePath: string;
   exportPath: string;
 }) => void;
 
 export const cutClip: CutMovieClip = ({
-  startTime,
+  timeStamp,
   duration,
   moviePath,
   exportPath,
 }) => {
+  // Cut Video
   const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
+
+  const { startTime, text } = timeStamp;
 
   const args = [
     "-ss",
@@ -25,16 +32,51 @@ export const cutClip: CutMovieClip = ({
     moviePath,
     "-c",
     "copy",
-    // "-an",
     "-t",
     duration,
-    join(exportPath, "clip.mp4"),
+    join(exportPath, "clipVideo.mp4"),
   ];
 
   try {
     execFileSync(ffmpeg, args, { stdio: "pipe" });
   } catch (error) {
     // console.log(error);
+  }
+
+  // Add Subtitles
+  const font: Font = {
+    text: `'${timeStamp.text}'`,
+    x: "(w-text_w)/2",
+    y: "(h-text_h - 20)",
+    fontfile: join(assetsPath, "font", "Helvetica.ttf"),
+    fontsize: 24,
+    fontcolor: "0xF1BE71",
+  };
+
+  // text='hrllo world':x=640:y=360:fontsize=24:fontcolor=white
+
+  const drawtext = Object.keys(font)
+    .map((key) => `${key}=${font[key]}`)
+    .join(":");
+
+  const subArgs = [
+    "-i",
+    join(exportPath, "clipVideo.mp4"),
+    "-vf",
+    `drawtext=${drawtext}`,
+    "-c:a",
+    "copy",
+    join(exportPath, "clip.mp4"),
+  ];
+
+  console.log(1);
+  console.log(subArgs.join(" "));
+  console.log(2);
+
+  try {
+    execFileSync(ffmpeg, subArgs, { stdio: "pipe" });
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -51,8 +93,6 @@ export const addCommentaryAudio: CommentaryAudio = ({
 }) => {
   const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
 
-  // ,"output.mp4
-
   const args = [
     "-i",
     clipPath,
@@ -67,20 +107,6 @@ export const addCommentaryAudio: CommentaryAudio = ({
     // "-shortest",
     join(exportPath, "video.mp4"),
   ];
-
-  // const args = [
-  //   "-i",
-  //   clipPath,
-  //   "-i",
-  //   audioPath,
-  //   "-map",
-  //   "0",
-  //   "-map",
-  //   "1:a",
-  //   "-c:v",
-  //   "copy",
-  //   join(exportPath, "video.mp4"),
-  // ];
 
   try {
     execFileSync(ffmpeg, args, { stdio: "pipe" });

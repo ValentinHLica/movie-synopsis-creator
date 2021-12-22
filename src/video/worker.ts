@@ -23,7 +23,7 @@ const init = async () => {
     const audioDuration = getDuration(join(exportPath, "subtitle.srt"));
 
     cutClip({
-      startTime: timeStamp.startTime,
+      timeStamp,
       duration: audioDuration,
       exportPath,
       moviePath,

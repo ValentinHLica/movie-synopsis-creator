@@ -178,7 +178,9 @@ export const getMovie = () => {
 
   return {
     moviePath,
-    timeStamps: timeStamps.map((e, index) => ({ ...e, id: index })),
+    timeStamps: timeStamps
+      .filter((e) => !(e.startTime === "" || e.text === ""))
+      .map((e, index) => ({ ...e, id: index })),
     exportPath,
   };
 };
