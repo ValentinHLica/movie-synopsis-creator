@@ -4,7 +4,7 @@ import generateClips from "./video/index";
 import { resetTemp } from "./utils/helpers";
 
 const renderVideo = async () => {
-  // console.time("Render");
+  console.time("Render");
 
   // Reset temp
   await resetTemp();
@@ -18,7 +18,7 @@ const renderVideo = async () => {
   // Reset temp
   // await resetTemp();
 
-  // console.timeEnd("Render");
+  console.timeEnd("Render");
 };
 
 renderVideo();

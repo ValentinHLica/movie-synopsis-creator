@@ -40,20 +40,23 @@ export const cutClip: CutMovieClip = ({
   try {
     execFileSync(ffmpeg, args, { stdio: "pipe" });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 
   // Add Subtitles
   const font: Font = {
-    text: `'${timeStamp.text}'`,
+    text: `'${text}'`,
     x: "(w-text_w)/2",
     y: "(h-text_h - 20)",
-    fontfile: join(assetsPath, "font", "Helvetica.ttf"),
+    font: `'${join(assetsPath, "font", "Helvetica.ttf")
+      .split("\\")
+      .join("/")
+      .split(":")
+      .join("\\\\:")}'`,
     fontsize: 24,
+    boxcolor: "0x161616",
     fontcolor: "0xF1BE71",
   };
-
-  // text='hrllo world':x=640:y=360:fontsize=24:fontcolor=white
 
   const drawtext = Object.keys(font)
     .map((key) => `${key}=${font[key]}`)
@@ -68,10 +71,6 @@ export const cutClip: CutMovieClip = ({
     "copy",
     join(exportPath, "clip.mp4"),
   ];
-
-  console.log(1);
-  console.log(subArgs.join(" "));
-  console.log(2);
 
   try {
     execFileSync(ffmpeg, subArgs, { stdio: "pipe" });
@@ -111,7 +110,7 @@ export const addCommentaryAudio: CommentaryAudio = ({
   try {
     execFileSync(ffmpeg, args, { stdio: "pipe" });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 };
 
@@ -143,7 +142,5 @@ export const mergeVideos: MergeVideos = ({ listPath, exportPath, title }) => {
     execFileSync(ffmpeg, args, { stdio: "pipe" });
   } catch (error) {
     console.log(error);
-
-    // console.log(error);
   }
 };
