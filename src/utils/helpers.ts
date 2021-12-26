@@ -127,7 +127,7 @@ export const slugify = (title: string) => {
 /**
  * Parse Time Format 00:01:01 into seconds
  */
-const parseTime = (time: string): number => {
+export const parseTime = (time: string): number => {
   const timer = time.split(":");
   let timeCount = 0;
 
@@ -156,7 +156,7 @@ const parseTime = (time: string): number => {
  * Get Subtitle duration
  */
 export const getDuration = (subtitlePath: string) => {
-  const subtitle = readFileSync(subtitlePath).toString();
+  const subtitle = readFileSync(join(subtitlePath, "subtitle.srt")).toString();
 
   const arr = subtitle
     .trim()

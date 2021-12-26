@@ -4,12 +4,22 @@ import { join } from "path";
 
 import Jimp from "jimp";
 
-import { dataPath, renderPath } from "../config/paths";
-import { TimeStamp } from "../interfaces/utils";
+import { assetsPath, dataPath, renderPath } from "../config/paths";
 
-import { getFolders, getMovie, spreadWork } from "../utils/helpers";
+import {
+  getDuration,
+  getFolders,
+  getMovie,
+  parseTime,
+  spreadWork,
+} from "../utils/helpers";
 import { generateAudioFile, getVoice } from "../audio/lib";
-import { addCommentaryAudio, getVideoRes, mergeVideos } from "./lib";
+import {
+  addCommentaryAudio,
+  addFilter,
+  generateVideo,
+  mergeVideos,
+} from "./lib";
 
 const createIntro = () => {
   const { title, categories } = getMovie();
@@ -35,11 +45,23 @@ const createIntro = () => {
   });
 
   // Generate random intro video
-  const folders = getFolders(renderPath);
+  const folders = getFolders(renderPath).filter(
+    (e) => e !== "intro" && e !== "outro"
+  );
+
+  const introDuration = parseTime(getDuration(introPath)) + 2;
+  let totalDuration = 0;
 
   const randomIds: number[] = [];
-  while (randomIds.length < 8) {
-    var randomId = Math.floor(Math.random() * folders.length) + 1;
+  while (introDuration > totalDuration) {
+    const randomId = Math.floor(Math.random() * (folders.length - 1));
+
+    const videoDuration = parseTime(
+      getDuration(join(renderPath, randomId + ""))
+    );
+
+    totalDuration += videoDuration;
+
     if (randomIds.indexOf(randomId) === -1) randomIds.push(randomId);
   }
 
@@ -54,16 +76,22 @@ const createIntro = () => {
   mergeVideos({
     exportPath: introPath,
     listPath,
+    title: "clip",
+  });
+
+  addFilter({
+    inputPath: join(introPath, "clip.mp4"),
+    exportPath: join(introPath, "clip-video.mp4"),
   });
 
   addCommentaryAudio({
-    exportPath: introPath,
+    clipPath: join(introPath, "clip-video.mp4"),
     audioPath: join(introPath, "audio.mp3"),
-    clipPath: join(introPath, "movie.mp4"),
+    exportPath: introPath,
   });
 };
 
-const createOutro = () => {
+const createOutro = async () => {
   const outroPath = join(renderPath, "outro");
   mkdirSync(outroPath);
 
@@ -83,25 +111,58 @@ const createOutro = () => {
     textFilePath,
   });
 
-  // Generate Outro image
-  const folders = getFolders(renderPath).filter(
-    (e) => e !== "intro" && e !== "outro"
-  );
-
-  const { width, height } = getVideoRes(join(renderPath, folders[0]));
+  const width = 1920;
+  const height = 1080;
 
   const image = new Jimp(width, height, "#eeeeed");
+  const logoImage = await Jimp.read(join(assetsPath, "images", "logo.png"));
+  const resize = 250;
+  const logo = logoImage.resize(resize, resize);
+  const font = await Jimp.loadFont(
+    join(assetsPath, "font", "outro", "outro.fnt")
+  );
 
   const outroText = `Thank you for watching`;
+  const outroTextWidth = Jimp.measureText(font, outroText);
+  const outroTextHeight = Jimp.measureTextHeight(
+    font,
+    outroText,
+    outroTextWidth + 100
+  );
+
+  const gropWidth = outroTextWidth + resize;
+
+  image.composite(logo, width / 2 - gropWidth / 2, 20);
+  image.print(
+    font,
+    width / 2 - gropWidth / 2 + resize,
+    resize / 2 - outroTextHeight / 2 + 10,
+    outroText
+  );
+
+  const imagePath = join(outroPath, "image.png");
+  await image.writeAsync(imagePath);
+
+  const duration = getDuration(outroPath);
+
+  generateVideo({
+    duration,
+    exportPath: outroPath,
+    image: imagePath,
+    audio: join(outroPath, "audio.mp3"),
+    title: "clip",
+  });
+
+  addFilter({
+    inputPath: join(outroPath, "clip.mp4"),
+    exportPath: join(outroPath, "video.mp4"),
+  });
 };
 
-type CreateClips = (args: {
-  timeStamps: TimeStamp[];
-  moviePath: string;
-}) => Promise<void>;
-
-const createClips: CreateClips = ({ timeStamps, moviePath }) => {
+const createClips = () => {
   return new Promise(async (resolve) => {
+    const { timeStamps, moviePath } = getMovie();
+
     const work = spreadWork(timeStamps);
     let counter = work.length;
 
@@ -130,7 +191,9 @@ const createClips: CreateClips = ({ timeStamps, moviePath }) => {
   });
 };
 
-const mergeFinalVideo = async ({ exportPath }) => {
+const mergeFinalVideo = async () => {
+  const { exportPath } = getMovie();
+
   const videos = getFolders(renderPath)
     .filter((f) => existsSync(join(renderPath, f, "video.mp4")))
     .map((t) => `file '${join(renderPath, t, "video.mp4")}'`)
@@ -141,6 +204,7 @@ const mergeFinalVideo = async ({ exportPath }) => {
   const listPathText = [
     `file '${join(renderPath, "intro", "video.mp4")}'`,
     videos,
+    `file '${join(renderPath, "outro", "video.mp4")}'`,
   ].join("\n");
 
   writeFileSync(listPath, listPathText);
@@ -156,13 +220,11 @@ const mergeFinalVideo = async ({ exportPath }) => {
 };
 
 export default async () => {
-  const { timeStamps, moviePath, exportPath } = getMovie();
-
-  await createClips({ timeStamps, moviePath });
+  await createClips();
 
   createIntro();
 
-  // createOutro();
+  await createOutro();
 
-  await mergeFinalVideo({ exportPath });
+  await mergeFinalVideo();
 };

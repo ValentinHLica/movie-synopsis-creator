@@ -1,22 +1,38 @@
 {
-  "moviePath": "C:\\Users\\licav\\Downloads\\Torrent\\Dont Look Up (2021) [1080p] [WEBRip] [5.1] [YTS.MX]\\Dont.Look.Up.2021.1080p.WEBRip.x264.AAC5.1-[YTS.MX].mp4",
+  "moviePath": "C:\\Users\\licav\\Desktop\\moviess\\matrix.mp4",
   "timeStamps": [
-    { "text": "the they talk to each other", "startTime": "00:41:41" },
-    { "text": "the they talk to each other", "startTime": "00:01:41" },
-    { "text": "the they talk to each other", "startTime": "00:40:41" },
-    { "text": "the they talk to each other", "startTime": "00:31:41" },
-    { "text": "the they talk to each other", "startTime": "00:21:41" },
-    { "text": "the they talk to each other", "startTime": "00:11:41" },
-    { "text": "the they talk to each other", "startTime": "00:61:41" },
-    { "text": "the they talk to each other", "startTime": "00:51:41" },
-    { "text": "the they talk to each other", "startTime": "00:10:41" },
-    { "text": "the they talk to each other", "startTime": "00:16:41" },
-    { "text": "the they talk to each other", "startTime": "00:24:41" },
-    { "text": "the they talk to each other", "startTime": "00:25:41" },
-    { "text": "the they talk to each other", "startTime": "00:26:41" },
-    { "text": "the they talk to each other", "startTime": "00:28:41" }
+    {
+      "text": "he explains to them what the meteor will do",
+      "startTime": "00:18:53"
+    },
+    {
+      "text": "the presidents body guard tells him that the scientist is right",
+      "startTime": "00:19:51"
+    },
+    {
+      "text": "they move into an big room where the talk about paintings",
+      "startTime": "00:24:58"
+    },
+    { "text": "he is looking at the news on the bar", "startTime": "00:32:55" },
+    {
+      "text": "she is arrested by the cops at the university ",
+      "startTime": "00:48:01"
+    },
+    {
+      "text": "jake is on the cartoon tv show talking about the metore",
+      "startTime": "00:56:24"
+    },
+    {
+      "text": "the space ships start and everyone looks at them",
+      "startTime": "01:03:37"
+    },
+    { "text": "she is very disappointed in him", "startTime": "01:21:29" },
+    {
+      "text": "the news anchor is smiling, because they think his an idiot",
+      "startTime": "01:29:21"
+    }
   ],
   "exportPath": "C:\\Users\\licav\\Desktop\\movies",
   "title": "don't look up",
-  "categories": ["Action"]
+  "categories": ["Sci-Fi", "Thriller"]
 }

@@ -5,38 +5,47 @@ import { assetsPath } from "../config/paths";
 import { TimeStamp } from "../interfaces/utils";
 import { Font } from "../interfaces/video";
 
-import { getArgument } from "../utils/helpers";
+import { getArgument, getDuration, parseTime } from "../utils/helpers";
 
-type CutMovieClip = (args: {
-  timeStamp: TimeStamp;
-  duration: string;
-  moviePath: string;
+type ChangeRatio = (args: {
+  inputPath: string;
   exportPath: string;
+  text?: string;
 }) => void;
 
-export const cutClip: CutMovieClip = ({
-  timeStamp,
-  duration,
-  moviePath,
-  exportPath,
-}) => {
-  const useSubtitle = getArgument("SUBTITLE");
-
+export const addFilter: ChangeRatio = ({ inputPath, exportPath, text }) => {
   // Cut Video
   const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
 
-  const { startTime, text } = timeStamp;
+  // Add Subtitles
+  const font: Font = {
+    text: `'${text}'`,
+    x: "(w-text_w)/2",
+    y: "(h-text_h - 20)",
+    // font: `'${join(assetsPath, "font", "Helvetica.ttf")
+    //   .split("\\")
+    //   .join("/")
+    //   .split(":")
+    //   .join("\\\\:")}'`,
+    font: "Arial",
+    fontsize: 24,
+    boxcolor: "0x161616",
+    fontcolor: "0xF1BE71",
+  };
+
+  const drawtext = Object.keys(font)
+    .map((key) => `${key}=${font[key]}`)
+    .join(": ");
 
   const args = [
-    "-ss",
-    startTime,
+    "-y",
     "-i",
-    moviePath,
-    "-c",
-    "copy",
-    "-t",
-    duration,
-    join(exportPath, useSubtitle ? "clipVideo.mp4" : "clip.mp4"),
+    inputPath,
+    "-vf",
+    `scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:-1:-1:color=black${
+      text ? `,drawtext=${drawtext}` : ""
+    }`,
+    exportPath,
   ];
 
   try {
@@ -44,42 +53,39 @@ export const cutClip: CutMovieClip = ({
   } catch (error) {
     console.log(error);
   }
+};
 
-  if (useSubtitle) {
-    // Add Subtitles
-    const font: Font = {
-      text: `'${text}'`,
-      x: "(w-text_w)/2",
-      y: "(h-text_h - 20)",
-      font: `'${join(assetsPath, "font", "Helvetica.ttf")
-        .split("\\")
-        .join("/")
-        .split(":")
-        .join("\\\\:")}'`,
-      fontsize: 24,
-      boxcolor: "0x161616",
-      fontcolor: "0xF1BE71",
-    };
+type CutMovieClip = (args: {
+  timeStamp: TimeStamp;
+  moviePath: string;
+  exportPath: string;
+}) => void;
 
-    const drawtext = Object.keys(font)
-      .map((key) => `${key}=${font[key]}`)
-      .join(": ");
+export const cutClip: CutMovieClip = ({ timeStamp, moviePath, exportPath }) => {
+  // Cut Video
+  const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
 
-    const subArgs = [
-      "-i",
-      join(exportPath, "clipVideo.mp4"),
-      "-vf",
-      `drawtext=${drawtext}`,
-      "-c:a",
-      "copy",
-      join(exportPath, "clip.mp4"),
-    ];
+  const { startTime } = timeStamp;
 
-    try {
-      execFileSync(ffmpeg, subArgs, { stdio: "pipe" });
-    } catch (error) {
-      console.log(error);
-    }
+  const duration = getDuration(exportPath);
+
+  const args = [
+    "-ss",
+    startTime,
+    "-i",
+    moviePath,
+    "-t",
+    duration,
+    "-c:v",
+    "copy",
+    "-an",
+    join(exportPath, "clip.mp4"),
+  ];
+
+  try {
+    execFileSync(ffmpeg, args, { stdio: "pipe" });
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -131,6 +137,7 @@ export const mergeVideos: MergeVideos = ({ listPath, exportPath, title }) => {
   const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
 
   const args = [
+    "-y",
     "-safe",
     "0",
     "-f",
@@ -177,6 +184,60 @@ export const getVideoRes = (filePath: string) => {
       width: parseInt(width[1]),
       height: parseInt(height[1]),
     };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+type GenerateVideo = (args: {
+  image: string;
+  audio?: string;
+  duration: string;
+  exportPath: string;
+  title?: string;
+}) => void;
+
+/**
+ * Generate Video from frame data
+ * @param renderDataPath Text file with frames data
+ * @param outputPath Video Output path
+ */
+export const generateVideo: GenerateVideo = ({
+  image,
+  audio,
+  duration,
+  exportPath,
+  title,
+}) => {
+  const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
+
+  const args = [
+    "-loop",
+    "1",
+    "-framerate",
+    "24",
+    "-i",
+    image,
+    "-i",
+    audio,
+    "-tune",
+    "stillimage",
+    "-c:a",
+    "aac",
+    "-b:a",
+    "192k",
+    "-shortest",
+    "-pix_fmt",
+    "yuv420p",
+    "-c:v",
+    "libx264",
+    "-t",
+    duration.toString(),
+    join(exportPath, `${title ?? "video"}.mp4`),
+  ];
+
+  try {
+    execFileSync(ffmpeg, args, { stdio: "pipe" });
   } catch (error) {
     console.log(error);
   }

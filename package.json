@@ -31,6 +31,9 @@
     "targets": [
       "node16-win-x64"
     ],
+    "assets": [
+      "build/assets/**/*"
+    ],
     "outputPath": "./"
   },
   "devDependencies": {

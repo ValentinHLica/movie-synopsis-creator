@@ -4,9 +4,7 @@ import { join } from "path";
 import { renderPath } from "../config/paths";
 import { TimeStamp } from "../interfaces/utils";
 
-import { getDuration } from "../utils/helpers";
-
-import { addCommentaryAudio, cutClip } from "./lib";
+import { addCommentaryAudio, addFilter, cutClip } from "./lib";
 
 const init = async () => {
   const args = process.argv.slice(2);
@@ -20,17 +18,20 @@ const init = async () => {
 
     const exportPath = join(renderPath, timeStamp.id + "");
 
-    const audioDuration = getDuration(join(exportPath, "subtitle.srt"));
-
     cutClip({
       timeStamp,
-      duration: audioDuration,
       exportPath,
       moviePath,
     });
 
+    addFilter({
+      inputPath: join(exportPath, "clip.mp4"),
+      exportPath: join(exportPath, "clip-video.mp4"),
+      text: timeStamp.text,
+    });
+
     addCommentaryAudio({
-      clipPath: join(exportPath, "clip.mp4"),
+      clipPath: join(exportPath, "clip-video.mp4"),
       audioPath: join(exportPath, "audio.mp3"),
       exportPath,
     });
