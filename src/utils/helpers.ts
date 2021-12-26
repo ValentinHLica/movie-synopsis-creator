@@ -171,17 +171,25 @@ export const getDuration = (subtitlePath: string) => {
 /**
  * Get Movie data
  */
-export const getMovie = () => {
-  const { moviePath, timeStamps, exportPath } = JSON.parse(
+export const getMovie = (firstLoad?: boolean) => {
+  const { moviePath, timeStamps, exportPath, title, categories } = JSON.parse(
     readFileSync(getArgument("MOVIE")).toString()
   ) as MovieData;
 
+  const newTimeStamps = timeStamps
+    .filter((e) => !(e.startTime === "" || e.text === ""))
+    .map((e, index) => ({ ...e, id: index }));
+
+  if (firstLoad) {
+    console.log(`process-count=${newTimeStamps.length * 2}`);
+  }
+
   return {
     moviePath,
-    timeStamps: timeStamps
-      .filter((e) => !(e.startTime === "" || e.text === ""))
-      .map((e, index) => ({ ...e, id: index })),
+    timeStamps: newTimeStamps,
     exportPath,
+    title,
+    categories,
   };
 };
 

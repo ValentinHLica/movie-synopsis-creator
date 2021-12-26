@@ -1,4 +1,10 @@
-export type Arguments = "BALCON" | "FFMPEG" | "MOVIE" | "VOICE";
+export type Arguments =
+  | "BALCON"
+  | "FFMPEG"
+  | "FFPROBE"
+  | "MOVIE"
+  | "VOICE"
+  | "SUBTITLE";
 
 export type TimeStamp = {
   text: string;
@@ -10,4 +16,6 @@ export type MovieData = {
   moviePath: string;
   timeStamps: TimeStamp[];
   exportPath: string;
+  title: string;
+  categories: string[];
 };

@@ -9,7 +9,7 @@ import { getVoice } from "./lib";
 
 export default async () => {
   return new Promise(async (resolve) => {
-    const { timeStamps } = getMovie();
+    const { timeStamps } = getMovie(true);
 
     for (const timeStamp of timeStamps) {
       const parentPath = join(renderPath, timeStamp.id + "");

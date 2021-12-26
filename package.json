@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/ValentinHLica/movie-synopsis-creator#readme",
   "dependencies": {
+    "jimp": "^0.16.1",
     "pkg": "^5.5.1"
   },
   "pkg": {

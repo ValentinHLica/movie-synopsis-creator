@@ -2,10 +2,6 @@ Idea:
 Movies will be downloaded from yts and synopsis will be fetched from imdb.
 Using UI user can select which text to show for specific start timestamp (calculate clip duration with text audio length using util). The Program will then take the movie and split it with the time stamps and add audio and subtitle to the clips. Merge entire clips to form video
 
-[]. Implemento intro per fillim dhe fund te videos#
-
-neser po su bone spat merru me projektin e gazit maroja neser edhe thuj lamtumir si rob.
-
 your future: 
 muajin tjtr te besh gati 2 video reddit per 30 dite qe ti do ti mbikqyresh vete per contenit, dhe gjithashtu rrite produksionin e content te reddit videos duke shtuar muzike ne bc. kto beji bashk me filmat
 
@@ -15,10 +11,6 @@ improvizo desing e ksaj video app.
 
 pastaj fillo ate channelin e krijimit te content me blog me stock videos.
 
-future prediction reals:
-neser merru me projektin e gazit dhe mbaroje brenda nje dite.
-
-
 []. improve dhe ate te reddit selektimin e fjaleve
 []. maro projektin dhe shiko me improve video watch time
     []. fokusohu dhe meso sesi kan bo tjeret popular dhe beje dhe ti,
@@ -27,12 +19,16 @@ neser merru me projektin e gazit dhe mbaroje brenda nje dite.
 []. read more about componetns, coding, and for fun and education.
 []. earn a living by youtube
 []. mso video editing qe ne te ardhmen ti krijosh vete videot me zerin tend ose me noj super voice ai
-
+[]. Implemento intro per fillim dhe fund te videos#
 
 []. Reddit Video Creator
 []. Movie creator, anime creator
 []. Blog stock video creator 
-[]. 
 
 
--i C:\Users\licav\AppData\Local\Temp\movie-synopsis-creator\render\9\clipVideo.mp4 -vf drawtext=text='Jim Preston (Chris Pratt),':x=(w-text_w)/2:y=(h-text_h - 20):fontfile=C:\Users\licav\Desktop\Dev\movie-synopsis-creator\build\assets\font\Helvetica.ttf:fontsize=24:fontcolor=0xF1BE71 -c:a copy clip.mp4
+
+Nje video eshte e ndare ne 3 skena:
+
+1. Intro: Hello, today we are going to explain an Action movie named bubble boy, spoilers ahead watch out and take care.
+2. Movie naration: basycly just narato over the actions of the people in the movie and maybe add jokes to give the channel a personality.
+3. End: Make sure to subscribe and turn on notification, See you on another video, Bye

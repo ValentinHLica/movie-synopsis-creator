@@ -20,6 +20,8 @@ export const cutClip: CutMovieClip = ({
   moviePath,
   exportPath,
 }) => {
+  const useSubtitle = getArgument("SUBTITLE");
+
   // Cut Video
   const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
 
@@ -34,7 +36,7 @@ export const cutClip: CutMovieClip = ({
     "copy",
     "-t",
     duration,
-    join(exportPath, "clipVideo.mp4"),
+    join(exportPath, useSubtitle ? "clipVideo.mp4" : "clip.mp4"),
   ];
 
   try {
@@ -43,39 +45,41 @@ export const cutClip: CutMovieClip = ({
     console.log(error);
   }
 
-  // Add Subtitles
-  const font: Font = {
-    text: `'${text}'`,
-    x: "(w-text_w)/2",
-    y: "(h-text_h - 20)",
-    font: `'${join(assetsPath, "font", "Helvetica.ttf")
-      .split("\\")
-      .join("/")
-      .split(":")
-      .join("\\\\:")}'`,
-    fontsize: 24,
-    boxcolor: "0x161616",
-    fontcolor: "0xF1BE71",
-  };
+  if (useSubtitle) {
+    // Add Subtitles
+    const font: Font = {
+      text: `'${text}'`,
+      x: "(w-text_w)/2",
+      y: "(h-text_h - 20)",
+      font: `'${join(assetsPath, "font", "Helvetica.ttf")
+        .split("\\")
+        .join("/")
+        .split(":")
+        .join("\\\\:")}'`,
+      fontsize: 24,
+      boxcolor: "0x161616",
+      fontcolor: "0xF1BE71",
+    };
 
-  const drawtext = Object.keys(font)
-    .map((key) => `${key}=${font[key]}`)
-    .join(":");
+    const drawtext = Object.keys(font)
+      .map((key) => `${key}=${font[key]}`)
+      .join(": ");
 
-  const subArgs = [
-    "-i",
-    join(exportPath, "clipVideo.mp4"),
-    "-vf",
-    `drawtext=${drawtext}`,
-    "-c:a",
-    "copy",
-    join(exportPath, "clip.mp4"),
-  ];
+    const subArgs = [
+      "-i",
+      join(exportPath, "clipVideo.mp4"),
+      "-vf",
+      `drawtext=${drawtext}`,
+      "-c:a",
+      "copy",
+      join(exportPath, "clip.mp4"),
+    ];
 
-  try {
-    execFileSync(ffmpeg, subArgs, { stdio: "pipe" });
-  } catch (error) {
-    console.log(error);
+    try {
+      execFileSync(ffmpeg, subArgs, { stdio: "pipe" });
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
@@ -103,7 +107,7 @@ export const addCommentaryAudio: CommentaryAudio = ({
     "1:a",
     "-c:v",
     "copy",
-    // "-shortest",
+    "-shortest",
     join(exportPath, "video.mp4"),
   ];
 
@@ -140,6 +144,39 @@ export const mergeVideos: MergeVideos = ({ listPath, exportPath, title }) => {
 
   try {
     execFileSync(ffmpeg, args, { stdio: "pipe" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getVideoRes = (filePath: string) => {
+  const ffprobe = getArgument("FFPROBE") ?? "ffprobe";
+
+  const args = [
+    "-v",
+    "error",
+    "-of",
+    "flat=s=_",
+    "-select_streams",
+    "v:0",
+    "-show_entries",
+    "stream=height,width",
+    filePath,
+  ];
+
+  try {
+    const outPut = execFileSync(ffprobe, args).toString();
+    var width = /width=(\d+)/.exec(outPut);
+    var height = /height=(\d+)/.exec(outPut);
+
+    if (!(width && height)) {
+      throw new Error("No dimensions found!");
+    }
+
+    return {
+      width: parseInt(width[1]),
+      height: parseInt(height[1]),
+    };
   } catch (error) {
     console.log(error);
   }
