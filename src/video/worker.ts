@@ -36,7 +36,7 @@ const init = async () => {
       exportPath,
     });
 
-    console.log("clip-created");
+    console.log("clip-generated");
   }
 
   // Kill Worker

@@ -58,34 +58,17 @@ const Jimp = require("jimp");
 const createOutro = async () => {
   const outroPath = __dirname;
   const assetsPath = join(__dirname, "..", "build", "assets");
-  const width = 1408;
-  const height = 1024;
+  const width = 1920;
+  const height = 1080;
 
   const image = new Jimp(width, height, "#eeeeed");
-  const logoImage = await Jimp.read(join(assetsPath, "images", "logo.png"));
-  const resize = 250;
-  const logo = logoImage.resize(resize, resize);
   const font = await Jimp.loadFont(
     join(assetsPath, "font", "outro", "outro.fnt")
   );
-
   const outroText = `Thank you for watching`;
   const outroTextWidth = Jimp.measureText(font, outroText);
-  const outroTextHeight = Jimp.measureTextHeight(
-    font,
-    outroText,
-    outroTextWidth + 100
-  );
 
-  const gropWidth = outroTextWidth + resize;
-
-  image.composite(logo, width / 2 - gropWidth / 2, 20);
-  image.print(
-    font,
-    width / 2 - gropWidth / 2 + resize,
-    resize / 2 - outroTextHeight / 2 + 10,
-    outroText
-  );
+  image.print(font, width / 2 - outroTextWidth / 2, 150, outroText);
 
   const imagePath = join(outroPath, "image.png");
   await image.writeAsync(imagePath);

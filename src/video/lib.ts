@@ -1,11 +1,10 @@
 import { join } from "path";
 import { execFileSync } from "child_process";
 
-import { assetsPath } from "../config/paths";
 import { TimeStamp } from "../interfaces/utils";
 import { Font } from "../interfaces/video";
 
-import { getArgument, getDuration, parseTime } from "../utils/helpers";
+import { getArgument, getDuration } from "../utils/helpers";
 
 type ChangeRatio = (args: {
   inputPath: string;
@@ -18,33 +17,29 @@ export const addFilter: ChangeRatio = ({ inputPath, exportPath, text }) => {
   const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
 
   // Add Subtitles
-  const font: Font = {
-    text: `'${text}'`,
-    x: "(w-text_w)/2",
-    y: "(h-text_h - 20)",
-    // font: `'${join(assetsPath, "font", "Helvetica.ttf")
-    //   .split("\\")
-    //   .join("/")
-    //   .split(":")
-    //   .join("\\\\:")}'`,
-    font: "Arial",
-    fontsize: 24,
-    boxcolor: "0x161616",
-    fontcolor: "0xF1BE71",
-  };
+  // const font: Font = {
+  //   text: `'${text}'`,
+  //   x: "(w-text_w)/2",
+  //   y: "(h-text_h - 20)",
+  //   font: "Arial",
+  //   fontsize: 24,
+  //   boxcolor: "0x161616",
+  //   fontcolor: "0xF1BE71",
+  // };
 
-  const drawtext = Object.keys(font)
-    .map((key) => `${key}=${font[key]}`)
-    .join(": ");
+  // const drawtext = Object.keys(font)
+  //   .map((key) => `${key}=${font[key]}`)
+  //   .join(": ");
+  // ${
+  //   text ? `,drawtext=${drawtext}` : ""
+  // }
 
   const args = [
     "-y",
     "-i",
     inputPath,
     "-vf",
-    `scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:-1:-1:color=black${
-      text ? `,drawtext=${drawtext}` : ""
-    }`,
+    `scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:-1:-1:color=black,fps=24`,
     exportPath,
   ];
 
@@ -192,7 +187,6 @@ export const getVideoRes = (filePath: string) => {
 type GenerateVideo = (args: {
   image: string;
   audio?: string;
-  duration: string;
   exportPath: string;
   title?: string;
 }) => void;
@@ -205,7 +199,6 @@ type GenerateVideo = (args: {
 export const generateVideo: GenerateVideo = ({
   image,
   audio,
-  duration,
   exportPath,
   title,
 }) => {
@@ -215,7 +208,7 @@ export const generateVideo: GenerateVideo = ({
     "-loop",
     "1",
     "-framerate",
-    "24",
+    "25",
     "-i",
     image,
     "-i",
@@ -231,8 +224,6 @@ export const generateVideo: GenerateVideo = ({
     "yuv420p",
     "-c:v",
     "libx264",
-    "-t",
-    duration.toString(),
     join(exportPath, `${title ?? "video"}.mp4`),
   ];
 
