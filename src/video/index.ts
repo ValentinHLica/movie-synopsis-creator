@@ -1,18 +1,21 @@
 import cluster from "cluster";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
 
 import Jimp from "jimp";
 
-import { assetsPath, dataPath, renderPath } from "../config/paths";
-
 import {
-  getDuration,
-  getFolders,
-  getMovie,
-  parseTime,
-  spreadWork,
-} from "../utils/helpers";
+  assetsPath,
+  clipPath,
+  clipVideoPath,
+  dataPath,
+  imagePath,
+  renderPath,
+  textPath,
+  videoPath,
+} from "../config/paths";
+import { resolution } from "../config/video";
+import { getDuration, getMovie, spreadWork } from "../utils/helpers";
 import { generateAudioFile, getVoice } from "../audio/lib";
 import {
   addCommentaryAudio,
@@ -22,97 +25,96 @@ import {
 } from "./lib";
 
 const createIntro = () => {
-  const { title, categories } = getMovie();
+  const {
+    title,
+    categories,
+    timeStamps,
+    cli: { ffmpeg, balcon, ffprobe },
+  } = getMovie();
 
-  const introPath = join(renderPath, "intro");
-  mkdirSync(introPath);
+  const id = "intro";
 
   // Generate Intro Audio
   const intro = `Hello, today we are going to explain an ${categories.join(
     " "
   )} movie named ${title}, spoilers ahead watch out and take care.`;
 
-  const textFilePath = join(introPath, "text.txt");
-
-  writeFileSync(textFilePath, intro);
+  writeFileSync(textPath(id), intro);
 
   const voice = getVoice();
 
   generateAudioFile({
+    id,
     voice,
-    exportPath: introPath,
-    textFilePath,
+    balcon,
   });
 
-  // Generate random intro video
-  const folders = getFolders(renderPath).filter(
-    (e) => e !== "intro" && e !== "outro"
-  );
-
-  const introDuration = parseTime(getDuration(introPath)) + 2;
+  const introDuration =
+    getDuration({
+      id,
+      ffprobe,
+    }) + 2;
   let totalDuration = 0;
 
   const randomIds: number[] = [];
   while (introDuration > totalDuration) {
-    const randomId = Math.floor(Math.random() * (folders.length - 1));
+    const randomId = Math.floor(Math.random() * (timeStamps.length - 1));
 
-    const videoDuration = parseTime(
-      getDuration(join(renderPath, randomId + ""))
-    );
+    const videoDuration = getDuration({
+      id: randomId,
+      ffprobe,
+    });
 
     totalDuration += videoDuration;
 
     if (randomIds.indexOf(randomId) === -1) randomIds.push(randomId);
   }
 
-  const listPath = join(introPath, "list.txt");
+  const listPath = join(renderPath, `${id}-list.txt`);
 
-  const videos = randomIds
-    .map((id) => `file '${join(renderPath, id + "", "clip.mp4")}'`)
-    .join("\n");
+  const videos = randomIds.map((id) => `file '${clipPath(id)}'`).join("\n");
 
   writeFileSync(listPath, videos);
 
   mergeVideos({
-    exportPath: introPath,
+    exportPath: renderPath,
     listPath,
-    title: "clip",
+    title: `${id}-clip`,
   });
 
   addFilter({
-    inputPath: join(introPath, "clip.mp4"),
-    exportPath: join(introPath, "clip-video.mp4"),
+    id,
+    ffmpeg,
   });
 
   addCommentaryAudio({
-    clipPath: join(introPath, "clip-video.mp4"),
-    audioPath: join(introPath, "audio.mp3"),
-    exportPath: introPath,
+    id,
+    ffmpeg,
   });
 };
 
 const createOutro = async () => {
-  const outroPath = join(renderPath, "outro");
-  mkdirSync(outroPath);
+  const {
+    cli: { ffmpeg, balcon },
+  } = getMovie();
 
-  const outro =
-    "Make sure to subscribe and turn on notification, See you on another video, Bye";
+  const id = "outro";
 
   // Generate Audio File
-  const textFilePath = join(outroPath, "text.txt");
-
-  writeFileSync(textFilePath, outro);
+  writeFileSync(
+    textPath(id),
+    "Make sure to subscribe and turn on notification, See you on another video, Bye"
+  );
 
   const voice = getVoice();
 
   generateAudioFile({
+    id,
     voice,
-    exportPath: outroPath,
-    textFilePath,
+    balcon,
   });
 
-  const width = 1920;
-  const height = 1080;
+  const { width, height } = resolution;
 
   const image = new Jimp(width, height, "#eeeeed");
   const font = await Jimp.loadFont(join(assetsPath, "font", "outro.fnt"));
@@ -121,25 +123,21 @@ const createOutro = async () => {
 
   image.print(font, width / 2 - outroTextWidth / 2, 150, outroText);
 
-  const imagePath = join(outroPath, "image.png");
-  await image.writeAsync(imagePath);
+  await image.writeAsync(imagePath(id));
 
   generateVideo({
-    exportPath: outroPath,
-    image: imagePath,
-    audio: join(outroPath, "audio.mp3"),
-    title: "clip",
-  });
-
-  addFilter({
-    inputPath: join(outroPath, "clip.mp4"),
-    exportPath: join(outroPath, "video.mp4"),
+    id,
+    ffmpeg,
   });
 };
 
 const createClips = () => {
   return new Promise(async (resolve) => {
-    const { timeStamps, moviePath } = getMovie();
+    const {
+      timeStamps,
+      moviePath,
+      cli: { ffmpeg, ffprobe },
+    } = getMovie();
 
     const work = spreadWork(timeStamps);
     let counter = work.length;
@@ -149,11 +147,19 @@ const createClips = () => {
 
       const jobsFilePath = join(dataPath, `${index + ""}-movie.json`);
 
-      writeFileSync(jobsFilePath, JSON.stringify(jobs));
+      writeFileSync(
+        jobsFilePath,
+        JSON.stringify({
+          jobs,
+          moviePath,
+          ffmpeg,
+          ffprobe,
+        })
+      );
 
       cluster.setupPrimary({
         exec: join(__dirname, "worker.js"),
-        args: [jobsFilePath, moviePath],
+        args: [jobsFilePath],
       });
 
       const worker = cluster.fork();
@@ -170,19 +176,21 @@ const createClips = () => {
 };
 
 const mergeFinalVideo = async () => {
-  const { exportPath } = getMovie();
+  const { timeStamps, exportPath } = getMovie();
 
-  const videos = getFolders(renderPath)
-    .filter((f) => existsSync(join(renderPath, f, "video.mp4")))
-    .map((t) => `file '${join(renderPath, t, "video.mp4")}'`)
+  const videos = timeStamps
+    .filter((_, index) => {
+      return existsSync(videoPath(index));
+    })
+    .map((_, index) => `file '${videoPath(index)}'`)
     .join("\n");
 
   const listPath = join(renderPath, "list.txt");
 
   const listPathText = [
-    `file '${join(renderPath, "intro", "video.mp4")}'`,
+    `file '${videoPath("intro")}'`,
     videos,
-    `file '${join(renderPath, "outro", "video.mp4")}'`,
+    `file '${clipPath("outro")}'`,
   ].join("\n");
 
   writeFileSync(listPath, listPathText);

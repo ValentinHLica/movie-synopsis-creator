@@ -33,5 +33,8 @@ Nje video eshte e ndare ne 3 skena:
 2. Movie naration: basycly just narato over the actions of the people in the movie and maybe add jokes to give the channel a personality.
 3. End: Make sure to subscribe and turn on notification, See you on another video, Bye
 
+[]. Implemento fetch e voice dhe te gjithe konfigurimet me movie.json
+[]. Implemento Voice Switch 
+    []. Shiko nese a don me bo custom voice dhe thjesht krijo text file 
 
 

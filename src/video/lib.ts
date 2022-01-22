@@ -1,21 +1,25 @@
 import { join } from "path";
-import { execFileSync } from "child_process";
+import { execSync } from "child_process";
 
+import {
+  audioPath,
+  clipPath,
+  clipVideoPath,
+  imagePath,
+  renderPath,
+  videoPath,
+} from "../config/paths";
+import { resolution, fps } from "../config/video";
 import { TimeStamp } from "../interfaces/utils";
-import { Font } from "../interfaces/video";
 
-import { getArgument, getDuration } from "../utils/helpers";
+import { getDuration, getMovie } from "../utils/helpers";
 
 type ChangeRatio = (args: {
-  inputPath: string;
-  exportPath: string;
-  text?: string;
+  id: number | string;
+  ffmpeg: string | null;
 }) => void;
 
-export const addFilter: ChangeRatio = ({ inputPath, exportPath, text }) => {
-  // Cut Video
-  const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
-
+export const addFilter: ChangeRatio = ({ id, ffmpeg }) => {
   // Add Subtitles
   // const font: Font = {
   //   text: `'${text}'`,
@@ -34,17 +38,16 @@ export const addFilter: ChangeRatio = ({ inputPath, exportPath, text }) => {
   //   text ? `,drawtext=${drawtext}` : ""
   // }
 
-  const args = [
-    "-y",
-    "-i",
-    inputPath,
-    "-vf",
-    `scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:-1:-1:color=black,fps=24`,
-    exportPath,
-  ];
+  const { width, height } = resolution;
+
+  const args = `-y -i ${clipPath(
+    id
+  )} -vf "scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:-1:-1:color=black,fps=${fps}" ${clipVideoPath(
+    id
+  )}`;
 
   try {
-    execFileSync(ffmpeg, args, { stdio: "pipe" });
+    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
   } catch (error) {
     console.log(error);
   }
@@ -53,69 +56,48 @@ export const addFilter: ChangeRatio = ({ inputPath, exportPath, text }) => {
 type CutMovieClip = (args: {
   timeStamp: TimeStamp;
   moviePath: string;
-  exportPath: string;
+  ffmpeg: string | null;
+  ffprobe: string | null;
 }) => void;
 
-export const cutClip: CutMovieClip = ({ timeStamp, moviePath, exportPath }) => {
-  // Cut Video
-  const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
+export const cutClip: CutMovieClip = ({
+  timeStamp,
+  moviePath,
+  ffmpeg,
+  ffprobe,
+}) => {
+  const { startTime, id } = timeStamp;
 
-  const { startTime } = timeStamp;
+  const outputPath = join(renderPath, `${id}-clip.mp4`);
 
-  const duration = getDuration(exportPath);
+  const duration = getDuration({
+    ffprobe,
+    id,
+  });
 
-  const args = [
-    "-ss",
-    startTime,
-    "-i",
-    moviePath,
-    "-t",
-    duration,
-    "-c:v",
-    "copy",
-    "-an",
-    join(exportPath, "clip.mp4"),
-  ];
+  const args = `-ss ${startTime} -i ${moviePath} -t ${duration} -c:v copy -an ${outputPath}`;
 
   try {
-    execFileSync(ffmpeg, args, { stdio: "pipe" });
+    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
   } catch (error) {
     console.log(error);
   }
 };
 
 type CommentaryAudio = (args: {
-  clipPath: string;
-  audioPath: string;
-  exportPath: string;
+  ffmpeg: string | null;
+  id: string | number;
 }) => void;
 
-export const addCommentaryAudio: CommentaryAudio = ({
-  clipPath,
-  audioPath,
-  exportPath,
-}) => {
-  const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
-
-  const args = [
-    "-i",
-    clipPath,
-    "-i",
-    audioPath,
-    "-map",
-    "0:v",
-    "-map",
-    "1:a",
-    "-c:v",
-    "copy",
-    "-shortest",
-    join(exportPath, "video.mp4"),
-  ];
+export const addCommentaryAudio: CommentaryAudio = ({ ffmpeg, id }) => {
+  const args = `-i ${clipVideoPath(id)} -i ${audioPath(
+    id
+  )} -map 0:v -map 1:a -c:v copy -shortest ${videoPath(id)}`;
 
   try {
-    execFileSync(ffmpeg, args, { stdio: "pipe" });
+    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 
@@ -129,45 +111,29 @@ type MergeVideos = (args: {
  * Merge Videos together
  */
 export const mergeVideos: MergeVideos = ({ listPath, exportPath, title }) => {
-  const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
+  const {
+    cli: { ffmpeg },
+  } = getMovie();
 
-  const args = [
-    "-y",
-    "-safe",
-    "0",
-    "-f",
-    "concat",
-    "-i",
-    listPath,
-    "-c",
-    "copy",
-    join(exportPath, `${title ?? "movie"}.mp4`),
-  ];
+  const outputPath = join(exportPath, `${title ?? "movie"}.mp4`);
+  const args = `-y -safe 0 -f concat -i ${listPath} -c copy ${outputPath}`;
 
   try {
-    execFileSync(ffmpeg, args, { stdio: "pipe" });
+    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
   } catch (error) {
     console.log(error);
   }
 };
 
 export const getVideoRes = (filePath: string) => {
-  const ffprobe = getArgument("FFPROBE") ?? "ffprobe";
+  const {
+    cli: { ffprobe },
+  } = getMovie();
 
-  const args = [
-    "-v",
-    "error",
-    "-of",
-    "flat=s=_",
-    "-select_streams",
-    "v:0",
-    "-show_entries",
-    "stream=height,width",
-    filePath,
-  ];
+  const args = `-v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width ${filePath}`;
 
   try {
-    const outPut = execFileSync(ffprobe, args).toString();
+    const outPut = execSync(`${ffprobe ?? "ffprobe"} ${args}`).toString();
     var width = /width=(\d+)/.exec(outPut);
     var height = /height=(\d+)/.exec(outPut);
 
@@ -185,10 +151,8 @@ export const getVideoRes = (filePath: string) => {
 };
 
 type GenerateVideo = (args: {
-  image: string;
-  audio?: string;
-  exportPath: string;
-  title?: string;
+  id: string | number;
+  ffmpeg: string | null;
 }) => void;
 
 /**
@@ -196,39 +160,15 @@ type GenerateVideo = (args: {
  * @param renderDataPath Text file with frames data
  * @param outputPath Video Output path
  */
-export const generateVideo: GenerateVideo = ({
-  image,
-  audio,
-  exportPath,
-  title,
-}) => {
-  const ffmpeg = getArgument("FFMPEG") ?? "ffmpeg";
-
-  const args = [
-    "-loop",
-    "1",
-    "-framerate",
-    "25",
-    "-i",
-    image,
-    "-i",
-    audio,
-    "-tune",
-    "stillimage",
-    "-c:a",
-    "aac",
-    "-b:a",
-    "192k",
-    "-shortest",
-    "-pix_fmt",
-    "yuv420p",
-    "-c:v",
-    "libx264",
-    join(exportPath, `${title ?? "video"}.mp4`),
-  ];
+export const generateVideo: GenerateVideo = ({ id, ffmpeg }) => {
+  const args = `-loop 1 -framerate ${fps} -i "${imagePath(id)}" -i "${audioPath(
+    id
+  )}" -tune stillimage -c:a aac -b:a 192k -shortest -pix_fmt yuv420p -c:v libx264 ${clipPath(
+    id
+  )}`;
 
   try {
-    execFileSync(ffmpeg, args, { stdio: "pipe" });
+    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
   } catch (error) {
     console.log(error);
   }

@@ -6,39 +6,41 @@ import { TimeStamp } from "../interfaces/utils";
 
 import { addCommentaryAudio, addFilter, cutClip } from "./lib";
 
+type ArgsType = {
+  jobs: TimeStamp[];
+  moviePath: string;
+  ffmpeg: string | null;
+  ffprobe: string | null;
+};
+
 const init = async () => {
   const args = process.argv.slice(2);
-  const timeStamps = JSON.parse(
+  const { jobs, moviePath, ffprobe, ffmpeg } = JSON.parse(
     readFileSync(args[0]).toString()
-  ) as TimeStamp[];
-  const moviePath = args[1] as string;
+  ) as ArgsType;
 
-  for (let index = 0; index < timeStamps.length; index++) {
-    const timeStamp = timeStamps[index];
-
-    const exportPath = join(renderPath, timeStamp.id + "");
+  for (const timeStamp of jobs) {
+    const { id } = timeStamp;
 
     cutClip({
       timeStamp,
-      exportPath,
       moviePath,
+      ffmpeg,
+      ffprobe,
     });
 
     addFilter({
-      inputPath: join(exportPath, "clip.mp4"),
-      exportPath: join(exportPath, "clip-video.mp4"),
-      text: timeStamp.text,
+      id: timeStamp.id,
+      ffmpeg,
     });
 
     addCommentaryAudio({
-      clipPath: join(exportPath, "clip-video.mp4"),
-      audioPath: join(exportPath, "audio.mp3"),
-      exportPath,
+      ffmpeg,
+      id,
     });
 
     console.log("clip-generated");
   }
-
   // Kill Worker
   process.exit();
 };

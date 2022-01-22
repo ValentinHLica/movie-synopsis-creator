@@ -1,7 +1,5 @@
 import { readFileSync } from "fs";
-import { join } from "path";
 
-import { renderPath } from "../config/paths";
 import { TimeStamp } from "../interfaces/utils";
 
 import { generateAudioFile } from "./lib";
@@ -11,17 +9,14 @@ const init = async () => {
   const timeStamps = JSON.parse(
     readFileSync(args[0]).toString()
   ) as TimeStamp[];
-  const voice = args[1];
+  const voice = args[1] as string;
+  const balcon = args[2] as string | null;
 
-  for (let index = 0; index < timeStamps.length; index++) {
-    const timeStamp = timeStamps[index];
-
-    const exportPath = join(renderPath, timeStamp.id + "");
-
+  for (const timeStamp of timeStamps) {
     generateAudioFile({
-      exportPath,
-      textFilePath: join(exportPath, "text.txt"),
+      id: timeStamp.id,
       voice,
+      balcon,
     });
   }
 

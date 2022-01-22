@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import { cpus } from "os";
 import {
   mkdirSync,
@@ -10,7 +11,7 @@ import {
 } from "fs";
 import { join } from "path";
 
-import { dataPath, renderPath } from "../config/paths";
+import { dataPath, renderPath, tempPath, audioPath } from "../config/paths";
 import { Arguments, MovieData } from "../interfaces/utils";
 
 /**
@@ -58,8 +59,11 @@ export const deleteFolder = (path: string) => {
  * Reset Temp folder for new process
  */
 export const resetTemp = async () => {
+  deleteFolder(tempPath);
   deleteFolder(renderPath);
   deleteFolder(dataPath);
+
+  mkdirSync(tempPath);
   mkdirSync(renderPath);
   mkdirSync(dataPath);
 };
@@ -152,29 +156,32 @@ export const parseTime = (time: string): number => {
   return timeCount;
 };
 
+type GetDuration = (args: {
+  id: number | string;
+  ffprobe: string | null;
+}) => number;
+
 /**
- * Get Subtitle duration
+ * Get Audio Duration
  */
-export const getDuration = (subtitlePath: string) => {
-  const subtitle = readFileSync(join(subtitlePath, "subtitle.srt")).toString();
+export const getDuration: GetDuration = ({ id, ffprobe }) => {
+  const args = `${ffprobe ?? "ffprobe"} -i "${audioPath(
+    id
+  )}" -show_entries format=duration -v quiet -of csv="p=0"`;
 
-  const arr = subtitle
-    .trim()
-    .split("\r\n")
-    .filter((e) => e !== "");
-
-  const time = arr[arr.length - 2].split("-->").map((e) => e.trim());
-
-  return time[1].replace(",", ".");
+  try {
+    return Number(execSync(args, { stdio: "pipe" }).toString().trim());
+  } catch (error) {
+    // console.log(error);
+  }
 };
 
 /**
  * Get Movie data
  */
-export const getMovie = (firstLoad?: boolean) => {
-  const { moviePath, timeStamps, exportPath, title, categories } = JSON.parse(
-    readFileSync(getArgument("MOVIE")).toString()
-  ) as MovieData;
+export const getMovie = (firstLoad?: boolean): MovieData => {
+  const { moviePath, timeStamps, exportPath, title, categories, voice, cli } =
+    JSON.parse(readFileSync(getArgument("MOVIE")).toString()) as MovieData;
 
   const newTimeStamps = timeStamps
     .filter((e) => !(e.startTime === "" || e.text === ""))
@@ -190,6 +197,8 @@ export const getMovie = (firstLoad?: boolean) => {
     exportPath,
     title,
     categories,
+    voice,
+    cli,
   };
 };
 

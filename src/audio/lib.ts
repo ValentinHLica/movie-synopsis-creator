@@ -1,23 +1,23 @@
-import { execFileSync } from "child_process";
+import { execSync } from "child_process";
 import { join } from "path";
 
-import { AudioFileGeneration } from "../interfaces/audio";
+import { renderPath, audioPath, textPath } from "../config/paths";
 
-import { getArgument } from "../utils/helpers";
+import { getMovie } from "../utils/helpers";
 
 /**
  * Get Voice
  */
 export const getVoice = () => {
-  const balcon = getArgument("BALCON") ?? "balcon";
+  const {
+    cli: { balcon },
+    voice,
+  } = getMovie();
 
-  const selectedVoice = getArgument("VOICE");
+  if (voice) return voice;
 
-  if (selectedVoice) {
-    return selectedVoice;
-  }
-
-  const voices = execFileSync(balcon, ["-l"]).toString();
+  // Fails safe
+  const voices = execSync(`${balcon ?? "balcon"} -l`).toString();
 
   const listOfVoice = voices
     .trim()
@@ -28,49 +28,26 @@ export const getVoice = () => {
   return listOfVoice[0];
 };
 
-type AudioGenerator = (args: AudioFileGeneration) => void;
+type AudioGenerator = (args: {
+  id: number | string;
+  voice: string;
+  balcon: string | null;
+}) => void;
 
 /**
  * Generate Audio from text
  */
-export const generateAudioFile: AudioGenerator = ({
-  textFilePath,
-  exportPath,
-  voice,
-}) => {
+export const generateAudioFile: AudioGenerator = ({ id, voice, balcon }) => {
   let selectedVoice = voice ?? getVoice();
 
-  const balcon = getArgument("BALCON") ?? "balcon";
-
-  const args = [
-    "-f",
-    textFilePath,
-    "-w",
-    `${join(exportPath, "audio.mp3")}`,
-    "-n",
-    selectedVoice,
-    "--encoding",
-    "utf8",
-    "-fr",
-    "--silence-end",
-    "200",
-    "48",
-    "--lrc-length",
-    "500",
-    "--srt-length",
-    "500",
-    "-srt",
-    "--srt-enc",
-    "utf8",
-    "--srt-fname",
-    `${join(exportPath, "subtitle.srt")}`,
-    "--ignore-url",
-  ];
+  const args = `-f "${textPath(id)}" -w "${audioPath(
+    id
+  )}" -n ${selectedVoice} --silence-end 200`;
 
   try {
-    execFileSync(balcon, args);
+    execSync(`${balcon ?? "balcon"} ${args}`);
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 
   console.log("audio-generated");

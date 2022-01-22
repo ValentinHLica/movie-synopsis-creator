@@ -12,9 +12,10 @@ export default async () => {
     const { timeStamps } = getMovie(true);
 
     for (const timeStamp of timeStamps) {
-      const parentPath = join(renderPath, timeStamp.id + "");
-      mkdirSync(parentPath);
-      writeFileSync(join(parentPath, "text.txt"), timeStamp.text);
+      writeFileSync(
+        join(renderPath, `${timeStamp.id}-text.txt`),
+        timeStamp.text
+      );
     }
 
     const work = spreadWork(timeStamps);
