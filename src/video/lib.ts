@@ -58,6 +58,7 @@ type CutMovieClip = (args: {
   moviePath: string;
   ffmpeg: string | null;
   ffprobe: string | null;
+  audioTrimDuration: number;
 }) => void;
 
 export const cutClip: CutMovieClip = ({
@@ -65,6 +66,7 @@ export const cutClip: CutMovieClip = ({
   moviePath,
   ffmpeg,
   ffprobe,
+  audioTrimDuration,
 }) => {
   const { startTime, id } = timeStamp;
 
@@ -73,9 +75,20 @@ export const cutClip: CutMovieClip = ({
   const duration = getDuration({
     ffprobe,
     id,
+    audioTrimDuration,
   });
 
-  const args = `-ss ${startTime} -i ${moviePath} -t ${duration} -c:v copy -an ${outputPath}`;
+  if (!duration) {
+    throw new Error(
+      JSON.stringify({
+        duration,
+        ffprobe,
+        id,
+      })
+    );
+  }
+
+  const args = `-y -ss ${startTime} -i ${moviePath} -t ${duration} -c:v copy -an ${outputPath}`;
 
   try {
     execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
@@ -90,7 +103,7 @@ type CommentaryAudio = (args: {
 }) => void;
 
 export const addCommentaryAudio: CommentaryAudio = ({ ffmpeg, id }) => {
-  const args = `-i ${clipVideoPath(id)} -i ${audioPath(
+  const args = `-y -i ${clipVideoPath(id)} -i ${audioPath(
     id
   )} -map 0:v -map 1:a -c:v copy -shortest ${videoPath(id)}`;
 
@@ -130,7 +143,7 @@ export const getVideoRes = (filePath: string) => {
     cli: { ffprobe },
   } = getMovie();
 
-  const args = `-v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width ${filePath}`;
+  const args = `-y -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width ${filePath}`;
 
   try {
     const outPut = execSync(`${ffprobe ?? "ffprobe"} ${args}`).toString();
@@ -161,7 +174,9 @@ type GenerateVideo = (args: {
  * @param outputPath Video Output path
  */
 export const generateVideo: GenerateVideo = ({ id, ffmpeg }) => {
-  const args = `-loop 1 -framerate ${fps} -i "${imagePath(id)}" -i "${audioPath(
+  const args = `-y -loop 1 -framerate ${fps} -i "${imagePath(
+    id
+  )}" -i "${audioPath(
     id
   )}" -tune stillimage -c:a aac -b:a 192k -shortest -pix_fmt yuv420p -c:v libx264 ${clipPath(
     id

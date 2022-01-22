@@ -11,11 +11,12 @@ type ArgsType = {
   moviePath: string;
   ffmpeg: string | null;
   ffprobe: string | null;
+  audioTrimDuration: number;
 };
 
 const init = async () => {
   const args = process.argv.slice(2);
-  const { jobs, moviePath, ffprobe, ffmpeg } = JSON.parse(
+  const { jobs, moviePath, ffprobe, ffmpeg, audioTrimDuration } = JSON.parse(
     readFileSync(args[0]).toString()
   ) as ArgsType;
 
@@ -27,6 +28,7 @@ const init = async () => {
       moviePath,
       ffmpeg,
       ffprobe,
+      audioTrimDuration,
     });
 
     addFilter({

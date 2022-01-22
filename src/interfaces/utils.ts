@@ -18,4 +18,6 @@ export type MovieData = {
     ffmpeg: string | null;
     balcon: string | null;
   };
+  customAudio: "audio" | "video" | null;
+  audioTrimDuration: number;
 };

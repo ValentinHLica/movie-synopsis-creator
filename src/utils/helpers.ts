@@ -59,6 +59,10 @@ export const deleteFolder = (path: string) => {
  * Reset Temp folder for new process
  */
 export const resetTemp = async () => {
+  const { customAudio } = getMovie();
+
+  if (customAudio === "video") return;
+
   deleteFolder(tempPath);
   deleteFolder(renderPath);
   deleteFolder(dataPath);
@@ -159,18 +163,26 @@ export const parseTime = (time: string): number => {
 type GetDuration = (args: {
   id: number | string;
   ffprobe: string | null;
+  audioTrimDuration: number;
 }) => number;
 
 /**
  * Get Audio Duration
  */
-export const getDuration: GetDuration = ({ id, ffprobe }) => {
+export const getDuration: GetDuration = ({
+  id,
+  ffprobe,
+  audioTrimDuration = 0,
+}) => {
   const args = `${ffprobe ?? "ffprobe"} -i "${audioPath(
     id
   )}" -show_entries format=duration -v quiet -of csv="p=0"`;
 
   try {
-    return Number(execSync(args, { stdio: "pipe" }).toString().trim());
+    return (
+      Number(execSync(args, { stdio: "pipe" }).toString().trim()) -
+      audioTrimDuration
+    );
   } catch (error) {
     // console.log(error);
   }
@@ -180,8 +192,17 @@ export const getDuration: GetDuration = ({ id, ffprobe }) => {
  * Get Movie data
  */
 export const getMovie = (firstLoad?: boolean): MovieData => {
-  const { moviePath, timeStamps, exportPath, title, categories, voice, cli } =
-    JSON.parse(readFileSync(getArgument("MOVIE")).toString()) as MovieData;
+  const {
+    moviePath,
+    timeStamps,
+    exportPath,
+    title,
+    categories,
+    voice,
+    cli,
+    customAudio,
+    audioTrimDuration,
+  } = JSON.parse(readFileSync(getArgument("MOVIE")).toString()) as MovieData;
 
   const newTimeStamps = timeStamps
     .filter((e) => !(e.startTime === "" || e.text === ""))
@@ -199,6 +220,8 @@ export const getMovie = (firstLoad?: boolean): MovieData => {
     categories,
     voice,
     cli,
+    customAudio,
+    audioTrimDuration,
   };
 };
 

@@ -40,5 +40,7 @@
     "ffprobe": null,
     "ffmpeg": null,
     "balcon": null
-  }
+  },
+  "customAudio": "video",
+  "audioTrimDuration": 0.8
 }

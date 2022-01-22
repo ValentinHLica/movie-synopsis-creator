@@ -7,11 +7,9 @@ import Jimp from "jimp";
 import {
   assetsPath,
   clipPath,
-  clipVideoPath,
   dataPath,
   imagePath,
   renderPath,
-  textPath,
   videoPath,
 } from "../config/paths";
 import { resolution } from "../config/video";
@@ -26,34 +24,29 @@ import {
 
 const createIntro = () => {
   const {
-    title,
-    categories,
     timeStamps,
     cli: { ffmpeg, balcon, ffprobe },
+    customAudio,
+    audioTrimDuration,
   } = getMovie();
 
   const id = "intro";
 
-  // Generate Intro Audio
-  const intro = `Hello, today we are going to explain an ${categories.join(
-    " "
-  )} movie named ${title}, spoilers ahead watch out and take care.`;
+  if (!customAudio) {
+    const voice = getVoice();
 
-  writeFileSync(textPath(id), intro);
-
-  const voice = getVoice();
-
-  generateAudioFile({
-    id,
-    voice,
-    balcon,
-  });
-
-  const introDuration =
-    getDuration({
+    generateAudioFile({
       id,
-      ffprobe,
-    }) + 2;
+      voice,
+      balcon,
+    });
+  }
+
+  const introDuration = getDuration({
+    id,
+    ffprobe,
+    audioTrimDuration,
+  });
   let totalDuration = 0;
 
   const randomIds: number[] = [];
@@ -63,6 +56,7 @@ const createIntro = () => {
     const videoDuration = getDuration({
       id: randomId,
       ffprobe,
+      audioTrimDuration,
     });
 
     totalDuration += videoDuration;
@@ -96,23 +90,20 @@ const createIntro = () => {
 const createOutro = async () => {
   const {
     cli: { ffmpeg, balcon },
+    customAudio,
   } = getMovie();
 
   const id = "outro";
 
-  // Generate Audio File
-  writeFileSync(
-    textPath(id),
-    "Make sure to subscribe and turn on notification, See you on another video, Bye"
-  );
+  if (!customAudio) {
+    const voice = getVoice();
 
-  const voice = getVoice();
-
-  generateAudioFile({
-    id,
-    voice,
-    balcon,
-  });
+    generateAudioFile({
+      id,
+      voice,
+      balcon,
+    });
+  }
 
   const { width, height } = resolution;
 
@@ -137,6 +128,7 @@ const createClips = () => {
       timeStamps,
       moviePath,
       cli: { ffmpeg, ffprobe },
+      audioTrimDuration,
     } = getMovie();
 
     const work = spreadWork(timeStamps);
@@ -154,6 +146,7 @@ const createClips = () => {
           moviePath,
           ffmpeg,
           ffprobe,
+          audioTrimDuration,
         })
       );
 
@@ -206,6 +199,10 @@ const mergeFinalVideo = async () => {
 };
 
 export default async () => {
+  const { customAudio } = getMovie();
+
+  if (customAudio == "audio") return;
+
   await createClips();
 
   createIntro();
