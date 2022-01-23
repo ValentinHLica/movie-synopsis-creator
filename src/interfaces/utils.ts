@@ -20,4 +20,7 @@ export type MovieData = {
   };
   customAudio: "audio" | "video" | null;
   audioTrimDuration: number;
+  intro: string | null;
+  outro: string | null;
+  outroImage: string | null;
 };

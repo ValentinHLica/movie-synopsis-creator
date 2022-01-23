@@ -192,19 +192,11 @@ export const getDuration: GetDuration = ({
  * Get Movie data
  */
 export const getMovie = (firstLoad?: boolean): MovieData => {
-  const {
-    moviePath,
-    timeStamps,
-    exportPath,
-    title,
-    categories,
-    voice,
-    cli,
-    customAudio,
-    audioTrimDuration,
-  } = JSON.parse(readFileSync(getArgument("MOVIE")).toString()) as MovieData;
+  const data = JSON.parse(
+    readFileSync(getArgument("MOVIE")).toString()
+  ) as MovieData;
 
-  const newTimeStamps = timeStamps
+  const newTimeStamps = data.timeStamps
     .filter((e) => !(e.startTime === "" || e.text === ""))
     .map((e, index) => ({ ...e, id: index }));
 
@@ -213,15 +205,8 @@ export const getMovie = (firstLoad?: boolean): MovieData => {
   }
 
   return {
-    moviePath,
+    ...data,
     timeStamps: newTimeStamps,
-    exportPath,
-    title,
-    categories,
-    voice,
-    cli,
-    customAudio,
-    audioTrimDuration,
   };
 };
 

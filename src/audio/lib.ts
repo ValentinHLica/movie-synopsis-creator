@@ -1,7 +1,6 @@
 import { execSync } from "child_process";
-import { join } from "path";
 
-import { renderPath, audioPath, textPath } from "../config/paths";
+import { audioPath, textPath } from "../config/paths";
 
 import { getMovie } from "../utils/helpers";
 
@@ -40,9 +39,7 @@ type AudioGenerator = (args: {
 export const generateAudioFile: AudioGenerator = ({ id, voice, balcon }) => {
   let selectedVoice = voice ?? getVoice();
 
-  const args = `-f "${textPath(id)}" -w "${audioPath(
-    id
-  )}" -n ${selectedVoice} --silence-end 200`;
+  const args = `-f "${textPath(id)}" -w "${audioPath(id)}" -n ${selectedVoice}`;
 
   try {
     execSync(`${balcon ?? "balcon"} ${args}`);

@@ -1,5 +1,5 @@
 import cluster from "cluster";
-import { mkdirSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { join } from "path";
 
 import { dataPath, renderPath, textPath } from "../config/paths";
@@ -9,7 +9,8 @@ import { getVoice } from "./lib";
 
 export default async () => {
   return new Promise(async (resolve) => {
-    const { timeStamps, customAudio, title, categories } = getMovie(true);
+    const { timeStamps, customAudio, title, categories, intro, outro } =
+      getMovie(true);
 
     if (customAudio === "video") return resolve(null);
 
@@ -20,21 +21,26 @@ export default async () => {
       );
     }
 
-    // Generate Intro Audio
-    const intro = `Hello, today we are going to explain an ${categories.join(
-      " "
-    )} movie named ${title}, spoilers ahead watch out and take care.`;
+    // Generate Intro and Outro text files
+    const introText = intro
+      ? intro
+          .replace("{title}", title)
+          .replace("{categories}", categories.join(" "))
+      : `Hello, today we are going to explain an ${categories.join(
+          " "
+        )} movie named ${title}, spoilers ahead watch out and take care.`;
 
-    writeFileSync(textPath("intro"), intro);
+    writeFileSync(textPath("intro"), introText);
 
-    // Generate Audio File
-    writeFileSync(
-      textPath("outro"),
-      "Make sure to subscribe and turn on notification, See you on another video, Bye"
-    );
+    const outroText =
+      outro ??
+      "Make sure to subscribe and turn on notification, See you on another video, Bye";
+
+    writeFileSync(textPath("outro"), outroText);
 
     if (customAudio === "audio") return resolve(null);
 
+    // Generate Audio Files
     const work = spreadWork(timeStamps);
     let counter = work.length;
 

@@ -12,7 +12,7 @@ import {
   renderPath,
   videoPath,
 } from "../config/paths";
-import { resolution } from "../config/video";
+
 import { getDuration, getMovie, spreadWork } from "../utils/helpers";
 import { generateAudioFile, getVoice } from "../audio/lib";
 import {
@@ -47,9 +47,11 @@ const createIntro = () => {
     ffprobe,
     audioTrimDuration,
   });
+
   let totalDuration = 0;
 
   const randomIds: number[] = [];
+
   while (introDuration > totalDuration) {
     const randomId = Math.floor(Math.random() * (timeStamps.length - 1));
 
@@ -91,6 +93,7 @@ const createOutro = async () => {
   const {
     cli: { ffmpeg, balcon },
     customAudio,
+    outroImage,
   } = getMovie();
 
   const id = "outro";
@@ -105,15 +108,8 @@ const createOutro = async () => {
     });
   }
 
-  const { width, height } = resolution;
-
-  const image = new Jimp(width, height, "#eeeeed");
-  const font = await Jimp.loadFont(join(assetsPath, "font", "outro.fnt"));
-  const outroText = `Thank you for watching`;
-  const outroTextWidth = Jimp.measureText(font, outroText);
-
-  image.print(font, width / 2 - outroTextWidth / 2, 150, outroText);
-
+  const outroImagePath = outroImage ?? join(assetsPath, "outro-image.png");
+  const image = await Jimp.read(outroImagePath);
   await image.writeAsync(imagePath(id));
 
   generateVideo({

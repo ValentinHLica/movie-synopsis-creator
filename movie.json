@@ -35,12 +35,15 @@
   "exportPath": "C:\\Users\\licav\\Desktop",
   "title": "Infinite",
   "categories": ["Action", "Sci-Fi"],
-  "voice": null,
+  "voice": "Lee",
   "cli": {
     "ffprobe": null,
     "ffmpeg": null,
     "balcon": null
   },
-  "customAudio": "video",
-  "audioTrimDuration": 0.8
+  "customAudio": null,
+  "audioTrimDuration": 0,
+  "intro": null,
+  "outro": null,
+  "outroImage": null
 }
