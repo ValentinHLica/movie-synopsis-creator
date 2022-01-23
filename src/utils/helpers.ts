@@ -11,7 +11,7 @@ import {
 } from "fs";
 import { join } from "path";
 
-import { dataPath, renderPath, tempPath, audioPath } from "../config/paths";
+import { dataPath, renderPath, audioPath } from "../config/paths";
 import { Arguments, MovieData } from "../interfaces/utils";
 
 /**
@@ -63,11 +63,9 @@ export const resetTemp = async () => {
 
   if (customAudio === "video") return;
 
-  deleteFolder(tempPath);
   deleteFolder(renderPath);
   deleteFolder(dataPath);
 
-  mkdirSync(tempPath);
   mkdirSync(renderPath);
   mkdirSync(dataPath);
 };
@@ -174,7 +172,7 @@ export const getDuration: GetDuration = ({
   ffprobe,
   audioTrimDuration = 0,
 }) => {
-  const args = `${ffprobe ?? "ffprobe"} -i "${audioPath(
+  const args = `${ffprobe ? `"${ffprobe}"` : "ffprobe"} -i "${audioPath(
     id
   )}" -show_entries format=duration -v quiet -of csv="p=0"`;
 

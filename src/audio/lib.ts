@@ -16,7 +16,7 @@ export const getVoice = () => {
   if (voice) return voice;
 
   // Fails safe
-  const voices = execSync(`${balcon ?? "balcon"} -l`).toString();
+  const voices = execSync(`${balcon ? `"${balcon}"` : "balcon"} -l`).toString();
 
   const listOfVoice = voices
     .trim()
@@ -42,7 +42,7 @@ export const generateAudioFile: AudioGenerator = ({ id, voice, balcon }) => {
   const args = `-f "${textPath(id)}" -w "${audioPath(id)}" -n ${selectedVoice}`;
 
   try {
-    execSync(`${balcon ?? "balcon"} ${args}`);
+    execSync(`${balcon ? `"${balcon}"` : "balcon"} ${args}`);
   } catch (error) {
     console.log(error);
   }

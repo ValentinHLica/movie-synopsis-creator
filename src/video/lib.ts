@@ -47,7 +47,7 @@ export const addFilter: ChangeRatio = ({ id, ffmpeg }) => {
   )}`;
 
   try {
-    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
+    execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, { stdio: "pipe" });
   } catch (error) {
     console.log(error);
   }
@@ -78,20 +78,12 @@ export const cutClip: CutMovieClip = ({
     audioTrimDuration,
   });
 
-  if (!duration) {
-    throw new Error(
-      JSON.stringify({
-        duration,
-        ffprobe,
-        id,
-      })
-    );
-  }
-
   const args = `-y -ss ${startTime} -i ${moviePath} -t ${duration} -c:v copy -an ${outputPath}`;
 
   try {
-    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
+    execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, {
+      stdio: "pipe",
+    });
   } catch (error) {
     console.log(error);
   }
@@ -108,7 +100,9 @@ export const addCommentaryAudio: CommentaryAudio = ({ ffmpeg, id }) => {
   )} -map 0:v -map 1:a -c:v copy -shortest ${videoPath(id)}`;
 
   try {
-    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
+    execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, {
+      stdio: "pipe",
+    });
   } catch (error) {
     // console.log(error);
   }
@@ -132,7 +126,9 @@ export const mergeVideos: MergeVideos = ({ listPath, exportPath, title }) => {
   const args = `-y -safe 0 -f concat -i ${listPath} -c copy ${outputPath}`;
 
   try {
-    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
+    execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, {
+      stdio: "pipe",
+    });
   } catch (error) {
     console.log(error);
   }
@@ -146,7 +142,9 @@ export const getVideoRes = (filePath: string) => {
   const args = `-y -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width ${filePath}`;
 
   try {
-    const outPut = execSync(`${ffprobe ?? "ffprobe"} ${args}`).toString();
+    const outPut = execSync(
+      `${ffprobe ? `"${ffprobe}"` : "ffprobe"} ${args}`
+    ).toString();
     var width = /width=(\d+)/.exec(outPut);
     var height = /height=(\d+)/.exec(outPut);
 
@@ -183,7 +181,7 @@ export const generateVideo: GenerateVideo = ({ id, ffmpeg }) => {
   )}`;
 
   try {
-    execSync(`${ffmpeg ?? "ffmpeg"} ${args}`, { stdio: "pipe" });
+    execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, { stdio: "pipe" });
   } catch (error) {
     console.log(error);
   }

@@ -61,9 +61,10 @@ const createIntro = () => {
       audioTrimDuration,
     });
 
-    totalDuration += videoDuration;
-
-    if (randomIds.indexOf(randomId) === -1) randomIds.push(randomId);
+    if (randomIds.indexOf(randomId) === -1) {
+      totalDuration += videoDuration;
+      randomIds.push(randomId);
+    }
   }
 
   const listPath = join(renderPath, `${id}-list.txt`);

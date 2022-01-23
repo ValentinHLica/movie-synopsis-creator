@@ -2,48 +2,58 @@
   "moviePath": "C:\\Users\\licav\\Desktop\\movies\\Infinite.mp4",
   "timeStamps": [
     {
-      "text": "The movie opens in outer space with the starship Avalon",
-      "startTime": "00:01:21"
+      "text": "The movie opens up with a text scrolls that explains",
+      "startTime": "00:12:40"
     },
     {
-      "text": "heading to the colony world of Homestead II during a mass exodus of Earth's population.",
-      "startTime": "00:01:39"
-    },
-    { "text": "The ship is on autopilot mode", "startTime": "00:01:58" },
-    { "text": "The crew ", "startTime": "00:02:09" },
-    {
-      "text": "and the 5,000 passengers are all in hibernation pods for the 120-year journey.",
-      "startTime": "00:02:12"
+      "text": "a short history of celestials and eternals.",
+      "startTime": "00:15:58"
     },
     {
-      "text": "The ship travels through a meteor storm,",
-      "startTime": "00:02:33"
+      "text": "The movie goes back and forth between past and present",
+      "startTime": "00:19:17"
     },
     {
-      "text": "and power is diverted to the forward shields",
-      "startTime": "00:02:43"
+      "text": "showing us all things the eternals participated in history,",
+      "startTime": "00:21:34"
     },
     {
-      "text": "then the ship collides with a large meteor",
-      "startTime": "00:03:08"
+      "text": "including helping them advance their technology",
+      "startTime": "00:23:31"
     },
     {
-      "text": "and the ship vibrates and the power blinks",
-      "startTime": "00:03:13"
+      "text": "to the point humans make the bomb that hit Hiroshima",
+      "startTime": "00:26:25"
+    },
+    {
+      "text": "and the conquistadors conquest through America.",
+      "startTime": "00:28:46"
+    },
+    {
+      "text": "As well as all the times they protected the world from the alien monster",
+      "startTime": "00:32:13"
+    },
+    {
+      "text": "called the Deviants up until the 1500s ",
+      "startTime": "00:34:37"
+    },
+    {
+      "text": "as they thought they had killed the last of them.",
+      "startTime": "00:37:00"
     }
   ],
   "exportPath": "C:\\Users\\licav\\Desktop",
-  "title": "Infinite",
-  "categories": ["Action", "Sci-Fi"],
-  "voice": "Lee",
+  "title": "infinite",
+  "categories": ["Action"],
+  "voice": "Daniel",
   "cli": {
-    "ffprobe": null,
-    "ffmpeg": null,
-    "balcon": null
+    "ffmpeg": "C:\\Program Files\\Ffmpeg\\ffmpeg.exe",
+    "ffprobe": "C:\\Program Files\\Ffmpeg\\ffprobe.exe",
+    "balcon": "C:\\Program Files\\Balcon\\balcon\\balcon.exe"
   },
-  "customAudio": null,
-  "audioTrimDuration": 0,
-  "intro": null,
-  "outro": null,
-  "outroImage": null
+  "audioTrimDuration": 0.8,
+  "customAudio": "video",
+  "intro": "Hello, today we are going to explain an {categories} movie named {title}, spoilers ahead watch out and take care.",
+  "outro": "Make sure to subscribe and turn on notification, See you on another video, Bye",
+  "outroImage": "C:\\Users\\licav\\Desktop\\test.png"
 }
