@@ -199,7 +199,11 @@ export const getMovie = (firstLoad?: boolean): MovieData => {
     .map((e, index) => ({ ...e, id: index }));
 
   if (firstLoad) {
-    console.log(`process-count=${newTimeStamps.length * 2}`);
+    const processCounter = data.customAudio
+      ? newTimeStamps.length
+      : newTimeStamps.length * 2 + 2;
+
+    console.log(`process-count=${processCounter + 2}`);
   }
 
   return {

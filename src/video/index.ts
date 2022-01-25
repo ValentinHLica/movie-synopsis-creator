@@ -88,6 +88,8 @@ const createIntro = () => {
     id,
     ffmpeg,
   });
+
+  console.log("clip-generated");
 };
 
 const createOutro = async () => {
@@ -109,7 +111,10 @@ const createOutro = async () => {
     });
   }
 
-  const outroImagePath = outroImage ?? join(assetsPath, "outro-image.png");
+  const outroImagePath =
+    (existsSync(outroImage) && outroImage) ??
+    join(assetsPath, "outro-image.png");
+
   const image = await Jimp.read(outroImagePath);
   await image.writeAsync(imagePath(id));
 
@@ -117,6 +122,8 @@ const createOutro = async () => {
     id,
     ffmpeg,
   });
+
+  console.log("clip-generated");
 };
 
 const createClips = () => {
