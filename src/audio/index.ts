@@ -9,10 +9,11 @@ import { getVoice } from "./lib";
 
 export default async () => {
   return new Promise(async (resolve) => {
-    const { timeStamps, customAudio, title, categories, intro, outro } =
-      getMovie(true);
-
-    if (customAudio === "video") return resolve(null);
+    const {
+      timeStamps,
+      cli: { balcon, bal4web },
+      customAudio,
+    } = getMovie(true);
 
     for (const timeStamp of timeStamps) {
       writeFileSync(
@@ -20,25 +21,6 @@ export default async () => {
         timeStamp.text
       );
     }
-
-    // Generate Intro and Outro text files
-    const introText = intro
-      ? intro
-          .replace("{title}", title)
-          .replace("{categories}", categories.join(" "))
-      : `Hello, today we are going to explain an ${categories.join(
-          " "
-        )} movie named ${title}, spoilers ahead watch out and take care.`;
-
-    writeFileSync(textPath("intro"), introText);
-
-    const outroText =
-      outro ??
-      "Make sure to subscribe and turn on notification, See you on another video, Bye";
-
-    writeFileSync(textPath("outro"), outroText);
-
-    if (customAudio === "audio") return resolve(null);
 
     // Generate Audio Files
     const work = spreadWork(timeStamps);
@@ -51,7 +33,16 @@ export default async () => {
 
       const jobsFilePath = join(dataPath, `${index + ""}-audio.json`);
 
-      writeFileSync(jobsFilePath, JSON.stringify(jobs));
+      writeFileSync(
+        jobsFilePath,
+        JSON.stringify({
+          jobs,
+          voice,
+          balcon,
+          bal4web,
+          customAudio,
+        })
+      );
 
       cluster.setupPrimary({
         exec: join(__dirname, "worker.js"),

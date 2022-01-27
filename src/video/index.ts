@@ -10,6 +10,7 @@ import {
   dataPath,
   imagePath,
   renderPath,
+  textPath,
   videoPath,
 } from "../config/paths";
 
@@ -25,22 +26,36 @@ import {
 const createIntro = () => {
   const {
     timeStamps,
-    cli: { ffmpeg, balcon, ffprobe },
-    customAudio,
+    cli: { ffmpeg, balcon, ffprobe, bal4web },
     audioTrimDuration,
+    intro,
+    title,
+    categories,
+    customAudio,
   } = getMovie();
 
   const id = "intro";
 
-  if (!customAudio) {
-    const voice = getVoice();
+  // Generate Intro and Outro text files
+  const introText = intro
+    ? intro
+        .replace("{title}", title)
+        .replace("{categories}", categories.join(" "))
+    : `Hello, today we are going to explain an ${categories.join(
+        " "
+      )} movie named ${title}, spoilers ahead watch out and take care.`;
 
-    generateAudioFile({
-      id,
-      voice,
-      balcon,
-    });
-  }
+  writeFileSync(textPath("intro"), introText);
+
+  const voice = getVoice();
+
+  generateAudioFile({
+    id,
+    voice,
+    balcon,
+    bal4web,
+    customAudio,
+  });
 
   const introDuration = getDuration({
     id,
@@ -94,26 +109,34 @@ const createIntro = () => {
 
 const createOutro = async () => {
   const {
-    cli: { ffmpeg, balcon },
-    customAudio,
+    cli: { ffmpeg, balcon, bal4web },
     outroImage,
+    outro,
+    customAudio,
   } = getMovie();
 
   const id = "outro";
 
-  if (!customAudio) {
-    const voice = getVoice();
+  const outroText =
+    outro ??
+    "Make sure to subscribe and turn on notification, See you on another video, Bye";
 
-    generateAudioFile({
-      id,
-      voice,
-      balcon,
-    });
-  }
+  writeFileSync(textPath("outro"), outroText);
+
+  const voice = getVoice();
+
+  generateAudioFile({
+    id,
+    voice,
+    balcon,
+    bal4web,
+    customAudio,
+  });
 
   const outroImagePath =
-    (existsSync(outroImage) && outroImage) ??
-    join(assetsPath, "outro-image.png");
+    outroImage && existsSync(outroImage)
+      ? outroImage
+      : join(assetsPath, "outro-image.png");
 
   const image = await Jimp.read(outroImagePath);
   await image.writeAsync(imagePath(id));
@@ -203,10 +226,6 @@ const mergeFinalVideo = async () => {
 };
 
 export default async () => {
-  const { customAudio } = getMovie();
-
-  if (customAudio == "audio") return;
-
   await createClips();
 
   createIntro();

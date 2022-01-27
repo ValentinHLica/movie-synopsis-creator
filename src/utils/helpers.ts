@@ -59,10 +59,6 @@ export const deleteFolder = (path: string) => {
  * Reset Temp folder for new process
  */
 export const resetTemp = async () => {
-  const { customAudio } = getMovie();
-
-  if (customAudio === "video") return;
-
   deleteFolder(renderPath);
   deleteFolder(dataPath);
 
@@ -199,11 +195,7 @@ export const getMovie = (firstLoad?: boolean): MovieData => {
     .map((e, index) => ({ ...e, id: index }));
 
   if (firstLoad) {
-    const processCounter = data.customAudio
-      ? newTimeStamps.length
-      : newTimeStamps.length * 2 + 2;
-
-    console.log(`process-count=${processCounter + 2}`);
+    console.log(`process-count=${newTimeStamps.length * 2 + 4}`);
   }
 
   return {
@@ -229,5 +221,5 @@ export const spreadWork = <T extends unknown>(work: T[]): T[][] => {
     counter += increment;
   }
 
-  return workSpreed;
+  return workSpreed.filter((e) => e.length > 0);
 };

@@ -2,44 +2,58 @@
   "moviePath": "C:\\Users\\licav\\Desktop\\Infinite.mp4",
   "timeStamps": [
     {
-      "text": "In 1985 Mexico City, Heinrich Treadway tries to escape the authorities and a man",
-      "startTime": "00:01:36"
+      "text": "The movie opens up with a narrator explaining how there are people who remember their past lives called infinites",
+      "startTime": "00:00:54"
     },
     {
-      "text": "He and his associates, Abel and Leona speak about \"the Egg",
-      "startTime": "00:02:52"
-    },
-    { "text": "which Treadway stole from Bathurst. ", "startTime": "00:03:52" },
-    {
-      "text": "Treadway tells Abel that if he does not survive",
-      "startTime": "00:05:38"
+      "text": "amongst them, two groups have vied for power, The Believers who protect the humans and The Nihilists who want to end all life on earth",
+      "startTime": "00:01:07"
     },
     {
-      "text": "the latter must remember to \"look inside\"",
-      "startTime": "00:07:11"
+      "text": "we then see Heinrich Treadway trying to escape the authorities",
+      "startTime": "00:01:44"
     },
     {
-      "text": "He drives off a bridge, jumping from his car in mid-air and onto another bridge 150 feet away.",
-      "startTime": "00:08:30"
+      "text": "he has got a scar on his stomach which he closes with the cars cigarette lighter",
+      "startTime": "00:01:53"
     },
     {
-      "text": "However, Treadway watches helplessly as Bathurst arrives and kills Abel and Leona.\n",
-      "startTime": "00:10:30"
+      "text": "He and his associates, Abel and Leona talk about \"the Egg,\"",
+      "startTime": "00:02:22"
     },
-    { "text": "test", "startTime": "00:00:00" }
+    { "text": "which Treadway stole.", "startTime": "00:02:32" },
+    {
+      "text": "trying to avoid the cops, he decides to drive off a bridge,",
+      "startTime": "00:05:15"
+    },
+    { "text": "jumping from his car in mid-air", "startTime": "00:06:14" },
+    {
+      "text": "and onto another bridge 150 feet away.",
+      "startTime": "00:06:19"
+    },
+    { "text": "his associates are hit by a truck", "startTime": "00:06:31" },
+    { "text": "where a man comes out of", "startTime": "00:07:07" },
+    { "text": "and shoots at the car", "startTime": "00:07:31" },
+    { "text": "killing both of heinrichs associates", "startTime": "00:07:38" },
+    { "text": "while he watches helplessly.", "startTime": "00:07:39" },
+    {
+      "text": "the scene changes to Evan waking up from a bad dream",
+      "startTime": "00:07:44"
+    }
   ],
   "exportPath": "C:\\Users\\licav\\Desktop",
-  "title": "asd",
-  "categories": ["Sci-Fi"],
-  "voice": "Daniel",
+  "title": "Infinites",
+  "categories": ["Action"],
+  "voice": "JacobNeural",
   "cli": {
     "ffmpeg": null,
     "ffprobe": null,
-    "balcon": "C:\\Users\\licav\\Desktop\\balcon.exe"
+    "balcon": null,
+    "bal4web": null
   },
-  "audioTrimDuration": 0,
-  "customAudio": null,
-  "intro": "hello today {title} with categories {categories}",
-  "outro": "sadas",
+  "customAudio": true,
+  "audioTrimDuration": 0.8,
+  "intro": null,
+  "outro": null,
   "outroImage": null
 }

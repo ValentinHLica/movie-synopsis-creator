@@ -17,8 +17,9 @@ export type MovieData = {
     ffprobe: string | null;
     ffmpeg: string | null;
     balcon: string | null;
+    bal4web: string | null;
   };
-  customAudio: "audio" | "video" | null;
+  customAudio: boolean;
   audioTrimDuration: number;
   intro: string | null;
   outro: string | null;
