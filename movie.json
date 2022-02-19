@@ -1,5 +1,5 @@
 {
-  "moviePath": "C:\\Users\\licav\\Desktop\\Infinite.mp4",
+  "moviePath": "C:\\Users\\licav\\Desktop\\other\\Antlers.mp4",
   "timeStamps": [
     {
       "text": "The movie opens up with a narrator explaining how there are people who remember their past lives called infinites",
@@ -26,20 +26,7 @@
       "text": "trying to avoid the cops, he decides to drive off a bridge,",
       "startTime": "00:05:15"
     },
-    { "text": "jumping from his car in mid-air", "startTime": "00:06:14" },
-    {
-      "text": "and onto another bridge 150 feet away.",
-      "startTime": "00:06:19"
-    },
-    { "text": "his associates are hit by a truck", "startTime": "00:06:31" },
-    { "text": "where a man comes out of", "startTime": "00:07:07" },
-    { "text": "and shoots at the car", "startTime": "00:07:31" },
-    { "text": "killing both of heinrichs associates", "startTime": "00:07:38" },
-    { "text": "while he watches helplessly.", "startTime": "00:07:39" },
-    {
-      "text": "the scene changes to Evan waking up from a bad dream",
-      "startTime": "00:07:44"
-    }
+    { "text": "jumping from his car in mid-air", "startTime": "00:06:14" }
   ],
   "exportPath": "C:\\Users\\licav\\Desktop",
   "title": "Infinites",
@@ -52,7 +39,6 @@
     "bal4web": null
   },
   "customAudio": true,
-  "audioTrimDuration": 0.8,
   "intro": null,
   "outro": null,
   "outroImage": null

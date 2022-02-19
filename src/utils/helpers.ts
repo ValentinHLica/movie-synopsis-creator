@@ -11,95 +11,14 @@ import {
 } from "fs";
 import { join } from "path";
 
-import { dataPath, renderPath, audioPath } from "../config/paths";
+import { dataPath, renderPath, audioPath, tempPath } from "../config/paths";
 import { Arguments, MovieData } from "../interfaces/utils";
 
 /**
  * Create Random String
  */
-export const createRandomString = (size: number) =>
+export const randomString = (size: number) =>
   (Math.random() + 1).toString(36).substring(size || 7);
-
-/**
- * List all files and folders inside folder
- * @param path Folder path
- * @returns List of files and folders inside folder
- */
-export const getFolders = (path: string | null): string[] => {
-  const files: string[] = readdirSync(path) ?? [];
-
-  const filesList: string[] = [];
-
-  for (const file of files) {
-    const index = parseInt(file.split("-")[0], 10);
-    filesList[index] = file;
-  }
-
-  return filesList.filter((item) => !item.includes(".json"));
-};
-
-/**
- * Delete Folder with its contents
- */
-export const deleteFolder = (path: string) => {
-  if (existsSync(path)) {
-    readdirSync(path).forEach((file: string) => {
-      const curPath = join(path, file);
-      if (lstatSync(curPath).isDirectory()) {
-        deleteFolder(curPath);
-      } else {
-        unlinkSync(curPath);
-      }
-    });
-    rmdirSync(path);
-  }
-};
-
-/**
- * Reset Temp folder for new process
- */
-export const resetTemp = async () => {
-  deleteFolder(renderPath);
-  deleteFolder(dataPath);
-
-  mkdirSync(renderPath);
-  mkdirSync(dataPath);
-};
-
-/**
- * Get Argument value
- */
-export const getArgument = (key: Arguments) => {
-  let value: string | null = null;
-
-  const args = process.argv
-    .filter((arg) => arg.split("=").length > 1)
-    .map((arg) => arg.split("="));
-
-  for (const argument of args) {
-    if (argument[0] === key) {
-      value = argument[1];
-      break;
-    }
-  }
-
-  return value;
-};
-
-/**
- * Get Aspect Ratio for images
- */
-export const getAspectRatio = async (width: number, height: number) => {
-  return height == 0 ? width : getAspectRatio(height, width % height);
-};
-
-/**
- * Convert sentence to time
- */
-export const countWords = (sentence: string): number => {
-  const words = sentence.split(" ");
-  return parseFloat((words.length / 170).toFixed(1).replace(".0", ""));
-};
 
 /**
  * Slugify post title to file
@@ -127,47 +46,67 @@ export const slugify = (title: string) => {
 };
 
 /**
- * Parse Time Format 00:01:01 into seconds
+ * Delete Folder with its contents
  */
-export const parseTime = (time: string): number => {
-  const timer = time.split(":");
-  let timeCount = 0;
+export const deleteFolder = (path: string) => {
+  if (existsSync(path)) {
+    readdirSync(path).forEach((file: string) => {
+      const curPath = join(path, file);
+      if (lstatSync(curPath).isDirectory()) {
+        deleteFolder(curPath);
+      } else {
+        unlinkSync(curPath);
+      }
+    });
+    rmdirSync(path);
+  }
+};
 
-  for (let i = 0; i < timer.length; i++) {
-    const time = timer[i];
+/**
+ * Reset Temp folder for new process
+ */
+export const resetTemp = async () => {
+  if (!existsSync(tempPath)) {
+    mkdirSync(tempPath);
+  }
 
-    switch (i) {
-      case 0:
-        timeCount += Number(time) * 3600; // Hours
-        break;
+  deleteFolder(renderPath);
+  deleteFolder(dataPath);
 
-      case 1:
-        timeCount += Number(time) * 60; // Minutes
-        break;
+  mkdirSync(renderPath);
+  mkdirSync(dataPath);
+};
 
-      case 2:
-        timeCount += parseFloat(time.replace(",", ".")); // Seconds
-        break;
+/**
+ * Get Argument value
+ */
+export const getArgument = (key: Arguments) => {
+  let value: string | null = null;
+
+  const args = process.argv
+    .filter((arg) => arg.split("=").length > 1)
+    .map((arg) => arg.split("="));
+
+  for (const argument of args) {
+    if (argument[0] === key) {
+      value = argument[1];
+      break;
     }
   }
 
-  return timeCount;
+  return value;
 };
 
 type GetDuration = (args: {
   id: number | string;
   ffprobe: string | null;
-  audioTrimDuration: number;
+  customAudio: boolean;
 }) => number;
 
 /**
  * Get Audio Duration
  */
-export const getDuration: GetDuration = ({
-  id,
-  ffprobe,
-  audioTrimDuration = 0,
-}) => {
+export const getDuration: GetDuration = ({ id, ffprobe, customAudio }) => {
   const args = `${ffprobe ? `"${ffprobe}"` : "ffprobe"} -i "${audioPath(
     id
   )}" -show_entries format=duration -v quiet -of csv="p=0"`;
@@ -175,7 +114,7 @@ export const getDuration: GetDuration = ({
   try {
     return (
       Number(execSync(args, { stdio: "pipe" }).toString().trim()) -
-      audioTrimDuration
+      (customAudio ? 0.8 : 0)
     );
   } catch (error) {
     // console.log(error);

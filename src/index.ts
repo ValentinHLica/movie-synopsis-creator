@@ -15,9 +15,6 @@ const renderVideo = async () => {
   // Generate Clips
   await generateClips();
 
-  // Reset temp
-  // await resetTemp();
-
   console.timeEnd("Render");
 };
 

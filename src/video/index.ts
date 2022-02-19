@@ -14,7 +14,13 @@ import {
   videoPath,
 } from "../config/paths";
 
-import { getDuration, getMovie, spreadWork } from "../utils/helpers";
+import {
+  getDuration,
+  getMovie,
+  randomString,
+  slugify,
+  spreadWork,
+} from "../utils/helpers";
 import { generateAudioFile, getVoice } from "../audio/lib";
 import {
   addCommentaryAudio,
@@ -27,7 +33,6 @@ const createIntro = () => {
   const {
     timeStamps,
     cli: { ffmpeg, balcon, ffprobe, bal4web },
-    audioTrimDuration,
     intro,
     title,
     categories,
@@ -60,7 +65,7 @@ const createIntro = () => {
   const introDuration = getDuration({
     id,
     ffprobe,
-    audioTrimDuration,
+    customAudio,
   });
 
   let totalDuration = 0;
@@ -73,7 +78,7 @@ const createIntro = () => {
     const videoDuration = getDuration({
       id: randomId,
       ffprobe,
-      audioTrimDuration,
+      customAudio,
     });
 
     if (randomIds.indexOf(randomId) === -1) {
@@ -107,7 +112,7 @@ const createIntro = () => {
   console.log("clip-generated");
 };
 
-const createOutro = async () => {
+export const createOutro = async () => {
   const {
     cli: { ffmpeg, balcon, bal4web },
     outroImage,
@@ -139,6 +144,7 @@ const createOutro = async () => {
       : join(assetsPath, "outro-image.png");
 
   const image = await Jimp.read(outroImagePath);
+
   await image.writeAsync(imagePath(id));
 
   generateVideo({
@@ -155,7 +161,7 @@ const createClips = () => {
       timeStamps,
       moviePath,
       cli: { ffmpeg, ffprobe },
-      audioTrimDuration,
+      customAudio,
     } = getMovie();
 
     const work = spreadWork(timeStamps);
@@ -173,7 +179,7 @@ const createClips = () => {
           moviePath,
           ffmpeg,
           ffprobe,
-          audioTrimDuration,
+          customAudio,
         })
       );
 
@@ -196,7 +202,7 @@ const createClips = () => {
 };
 
 const mergeFinalVideo = async () => {
-  const { timeStamps, exportPath } = getMovie();
+  const { timeStamps, exportPath, title } = getMovie();
 
   const videos = timeStamps
     .filter((_, index) => {
@@ -215,14 +221,15 @@ const mergeFinalVideo = async () => {
 
   writeFileSync(listPath, listPathText);
 
-  const videoExportPath = join(exportPath, `movie.mp4`);
+  const videoTitle = `${slugify(title.toLowerCase())}-${randomString(2)}`;
 
   mergeVideos({
     listPath,
     exportPath,
+    title: videoTitle,
   });
 
-  console.log(`process-done=${videoExportPath}`);
+  console.log(`process-done=${join(exportPath, videoTitle)}.mp4`);
 };
 
 export default async () => {

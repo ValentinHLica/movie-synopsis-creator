@@ -58,7 +58,7 @@ type CutMovieClip = (args: {
   moviePath: string;
   ffmpeg: string | null;
   ffprobe: string | null;
-  audioTrimDuration: number;
+  customAudio: boolean;
 }) => void;
 
 export const cutClip: CutMovieClip = ({
@@ -66,7 +66,7 @@ export const cutClip: CutMovieClip = ({
   moviePath,
   ffmpeg,
   ffprobe,
-  audioTrimDuration,
+  customAudio,
 }) => {
   const { startTime, id } = timeStamp;
 
@@ -75,7 +75,7 @@ export const cutClip: CutMovieClip = ({
   const duration = getDuration({
     ffprobe,
     id,
-    audioTrimDuration,
+    customAudio,
   });
 
   const args = `-y -ss ${startTime} -i ${moviePath} -t ${duration} -c:v copy -an ${outputPath}`;
@@ -123,7 +123,7 @@ export const mergeVideos: MergeVideos = ({ listPath, exportPath, title }) => {
   } = getMovie();
 
   const outputPath = join(exportPath, `${title ?? "movie"}.mp4`);
-  const args = `-y -safe 0 -f concat -i ${listPath} -c copy ${outputPath}`;
+  const args = `-y -safe 0 -f concat -i ${listPath} -c copy "${outputPath}"`;
 
   try {
     execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, {
