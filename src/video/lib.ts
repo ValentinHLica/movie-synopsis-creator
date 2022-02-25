@@ -40,11 +40,11 @@ export const addFilter: ChangeRatio = ({ id, ffmpeg }) => {
 
   const { width, height } = resolution;
 
-  const args = `-y -i ${clipPath(
+  const args = `-y -i "${clipPath(
     id
-  )} -vf "scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:-1:-1:color=black,fps=${fps}" ${clipVideoPath(
+  )}" -vf "scale=${width}:${height}:force_original_aspect_ratio=decrease,pad=${width}:${height}:-1:-1:color=black,fps=${fps}" "${clipVideoPath(
     id
-  )}`;
+  )}"`;
 
   try {
     execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, { stdio: "pipe" });
@@ -78,7 +78,7 @@ export const cutClip: CutMovieClip = ({
     customAudio,
   });
 
-  const args = `-y -ss ${startTime} -i ${moviePath} -t ${duration} -c:v copy -an ${outputPath}`;
+  const args = `-y -ss ${startTime} -i "${moviePath}" -t ${duration} -c:v copy -an "${outputPath}"`;
 
   try {
     execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, {
@@ -95,9 +95,9 @@ type CommentaryAudio = (args: {
 }) => void;
 
 export const addCommentaryAudio: CommentaryAudio = ({ ffmpeg, id }) => {
-  const args = `-y -i ${clipVideoPath(id)} -i ${audioPath(
+  const args = `-y -i "${clipVideoPath(id)}" -i "${audioPath(
     id
-  )} -map 0:v -map 1:a -c:v copy -shortest ${videoPath(id)}`;
+  )}" -map 0:v -map 1:a -c:v copy -shortest "${videoPath(id)}"`;
 
   try {
     execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, {
@@ -123,7 +123,7 @@ export const mergeVideos: MergeVideos = ({ listPath, exportPath, title }) => {
   } = getMovie();
 
   const outputPath = join(exportPath, `${title ?? "movie"}.mp4`);
-  const args = `-y -safe 0 -f concat -i ${listPath} -c copy "${outputPath}"`;
+  const args = `-y -safe 0 -f concat -i "${listPath}" -c copy "${outputPath}"`;
 
   try {
     execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, {
@@ -139,7 +139,7 @@ export const getVideoRes = (filePath: string) => {
     cli: { ffprobe },
   } = getMovie();
 
-  const args = `-y -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width ${filePath}`;
+  const args = `-y -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width "${filePath}"`;
 
   try {
     const outPut = execSync(
@@ -176,9 +176,9 @@ export const generateVideo: GenerateVideo = ({ id, ffmpeg }) => {
     id
   )}" -i "${audioPath(
     id
-  )}" -tune stillimage -c:a aac -b:a 192k -shortest -pix_fmt yuv420p -c:v libx264 ${clipPath(
+  )}" -tune stillimage -c:a aac -b:a 192k -shortest -pix_fmt yuv420p -c:v libx264 "${clipPath(
     id
-  )}`;
+  )}"`;
 
   try {
     execSync(`${ffmpeg ? `"${ffmpeg}"` : "ffmpeg"} ${args}`, { stdio: "pipe" });

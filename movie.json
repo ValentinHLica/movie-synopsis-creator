@@ -1,43 +1,38 @@
 {
-  "moviePath": "C:\\Users\\licav\\Desktop\\other\\Antlers.mp4",
+  "moviePath": "C:\\Users\\licav\\Desktop\\Movies\\Come True\\movie.mp4",
   "timeStamps": [
     {
-      "text": "The movie opens up with a narrator explaining how there are people who remember their past lives called infinites",
-      "startTime": "00:00:54"
+      "text": "the movie opens up in point of view of a person walking in a straight line towards a small hill",
+      "startTime": "00:01:57"
+    },
+    { "text": "getting inside we see a door", "startTime": "00:02:31" },
+    {
+      "text": "that opens immediately when we get near it",
+      "startTime": "00:02:38"
     },
     {
-      "text": "amongst them, two groups have vied for power, The Believers who protect the humans and The Nihilists who want to end all life on earth",
-      "startTime": "00:01:07"
+      "text": "inside we se a creepy man staring at the ground",
+      "startTime": "00:03:06"
     },
     {
-      "text": "we then see Heinrich Treadway trying to escape the authorities",
-      "startTime": "00:01:44"
+      "text": "when we get near it sarah wakes up from the dream",
+      "startTime": "00:03:15"
     },
+    { "text": "she is sleeping outside in a park", "startTime": "00:03:27" },
+    { "text": "she hops on to a bike and", "startTime": "00:03:59" },
     {
-      "text": "he has got a scar on his stomach which he closes with the cars cigarette lighter",
-      "startTime": "00:01:53"
+      "text": "arrives to her house where she is hiding",
+      "startTime": "00:04:12"
     },
-    {
-      "text": "He and his associates, Abel and Leona talk about \"the Egg,\"",
-      "startTime": "00:02:22"
-    },
-    { "text": "which Treadway stole.", "startTime": "00:02:32" },
-    {
-      "text": "trying to avoid the cops, he decides to drive off a bridge,",
-      "startTime": "00:05:15"
-    },
-    { "text": "jumping from his car in mid-air", "startTime": "00:06:14" }
+    { "text": "waiting for her mother to get out", "startTime": "00:04:36" },
+    { "text": "she quickly gets inside", "startTime": "00:05:01" },
+    { "text": "and has a shower", "startTime": "00:05:08" }
   ],
-  "exportPath": "C:\\Users\\licav\\Desktop",
-  "title": "Infinites",
-  "categories": ["Action"],
-  "voice": "JacobNeural",
-  "cli": {
-    "ffmpeg": null,
-    "ffprobe": null,
-    "balcon": null,
-    "bal4web": null
-  },
+  "exportPath": "C:\\Users\\licav\\Desktop\\Movies\\Come True",
+  "title": "come true",
+  "categories": ["Horror", "Sci-Fi"],
+  "voice": "ChristopherNeural",
+  "cli": { "ffmpeg": null, "ffprobe": null, "balcon": null, "bal4web": null },
   "customAudio": true,
   "intro": null,
   "outro": null,
